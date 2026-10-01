@@ -248,29 +248,39 @@ export interface AppNotification {
   createdAt: string;
 }
 
-export interface EnrollmentReportItem {
-  semester: string;
-  year: number;
-  term: SemesterTerm;
-  totalEnrollments: number;
-  activeStudents: number;
+export interface EnrollmentReport {
+  totalActiveEnrollments: number;
+  totalSectionCapacity: number;
+  totalStudentsEnrolled: number;
+  enrollmentsByProgram: Array<{
+    programId: string;
+    programCode: string;
+    programName: string;
+    studentCount: number;
+  }>;
 }
 
-export interface AttendanceReportItem {
-  status: AttendanceStatus;
-  count: number;
-  percentage: number;
+export interface AttendanceReport {
+  totalAttendanceSessions: number;
+  totalRecordsMarked: number;
+  breakdown: Record<string, number>;
+  overallAttendanceRate: number;
 }
 
-export interface ResultReportItem {
-  grade: string;
-  count: number;
-  percentage: number;
+export interface ResultReport {
+  totalPublishedCourseResults: number;
+  passedCount: number;
+  failedCount: number;
+  passRate: number;
+  averageGradePoint: number;
+  gradeDistribution: Record<string, number>;
 }
 
-export interface FinanceReportItem {
-  semester: string;
-  totalInvoiced: number;
-  totalCollected: number;
-  totalPending: number;
+export interface FinanceReport {
+  totalInvoices: number;
+  totalBilledAmount: number;
+  totalCollectedAmount: number;
+  totalUnpaidAmount: number;
+  successfulPaymentsCount: number;
+  collectionRate: number;
 }

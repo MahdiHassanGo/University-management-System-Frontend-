@@ -35,6 +35,8 @@ export interface StudentProfile {
     code: string;
     name: string;
     degreeType: string;
+    totalCredits?: number;
+    maxSemesterCredits?: number;
     department?: {
       id: string;
       code: string;
