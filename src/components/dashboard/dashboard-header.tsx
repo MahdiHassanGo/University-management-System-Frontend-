@@ -9,6 +9,7 @@ import {
   Shield,
   User as UserIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -207,12 +208,21 @@ export default function DashboardHeader({ role }: { role: UserRole }) {
 
         {/* User Pill */}
         <div className="flex items-center gap-2.5 rounded-full border bg-muted/40 py-1 pl-2.5 pr-1.5 text-xs">
-          <div className="flex items-center gap-1.5 font-medium text-foreground">
+          <Link
+            href={
+              role === "SUPER_ADMIN"
+                ? "/admin/profile"
+                : role === "INSTRUCTOR"
+                  ? "/instructor/profile"
+                  : "/student/profile"
+            }
+            className="flex items-center gap-1.5 font-medium text-foreground hover:text-primary transition-colors"
+          >
             <UserIcon className="size-3.5 text-muted-foreground" />
             <span className="max-w-[120px] truncate sm:max-w-[180px]">
               {displayName}
             </span>
-          </div>
+          </Link>
           <Button
             variant="ghost"
             size="sm"

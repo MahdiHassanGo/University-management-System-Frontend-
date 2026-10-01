@@ -4,7 +4,7 @@ interface StatCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  icon: LucideIcon;
+  icon: LucideIcon | React.ReactNode;
   trend?: string;
   badgeClass?: string;
 }
@@ -13,10 +13,13 @@ export default function StatCard({
   title,
   value,
   subtitle,
-  icon: Icon,
+  icon,
   trend,
   badgeClass = "bg-primary/10 text-primary",
 }: StatCardProps) {
+  const isComponent = typeof icon === "function";
+  const Icon = isComponent ? (icon as LucideIcon) : null;
+
   return (
     <div className="rounded-xl border bg-card p-5 shadow-xs hover:shadow-sm transition-all space-y-3">
       <div className="flex items-center justify-between">
@@ -26,7 +29,7 @@ export default function StatCard({
         <div
           className={`flex size-8 items-center justify-center rounded-lg ${badgeClass}`}
         >
-          <Icon className="size-4" />
+          {Icon ? <Icon className="size-4" /> : (icon as React.ReactNode)}
         </div>
       </div>
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
