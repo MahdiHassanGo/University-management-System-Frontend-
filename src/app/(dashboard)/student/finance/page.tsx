@@ -77,9 +77,33 @@ export default function StudentFinancePage() {
     },
   });
 
-  const handlePay = (invoiceId: string) => {
-    setActivePayingId(invoiceId);
-    paymentMutation.mutate(invoiceId);
+  const handlePay = async (inv: FeeInvoice) => {
+    setActivePayingId(inv.id);
+    try {
+      const res = await fetch("/api/payment/sslcommerz/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          invoiceId: inv.id,
+          amount: inv.amount,
+          studentName: inv.student?.name,
+          studentId: inv.student?.studentId,
+        }),
+      });
+      const result = await res.json();
+      if (result.success && result.gatewayUrl) {
+        toast.add({
+          title: "Connecting to SSLCommerz",
+          description: "Redirecting to secure test payment gateway...",
+          type: "info",
+        });
+        window.location.href = result.gatewayUrl;
+        return;
+      }
+    } catch {
+      // Fallback to backend initiate
+    }
+    paymentMutation.mutate(inv.id);
   };
 
   const invoices = invoicesData?.data || [];
@@ -199,7 +223,7 @@ export default function StudentFinancePage() {
                             <Button
                               size="sm"
                               disabled={isPaying}
-                              onClick={() => handlePay(inv.id)}
+                              onClick={() => handlePay(inv)}
                               className="h-7 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs font-semibold"
                             >
                               {isPaying ? (
