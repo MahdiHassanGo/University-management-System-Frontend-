@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray, extractPaginationMeta } from "@/lib/utils";
 import type { StudentProfile } from "@/types";
 
 function StudentsTableContent() {
@@ -118,10 +119,10 @@ function StudentsTableContent() {
     createMutation.mutate(formData);
   };
 
-  const students = data?.data || [];
-  const meta = data?.meta;
-  const programs = programsData?.data || [];
-  const semesters = semestersData?.data || [];
+  const students = extractDataArray<StudentProfile>(data);
+  const meta = extractPaginationMeta(data);
+  const programs = extractDataArray(programsData);
+  const semesters = extractDataArray(semestersData);
 
   return (
     <div className="space-y-6">

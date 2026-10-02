@@ -13,6 +13,7 @@ import TableSkeleton from "@/components/common/table-skeleton";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { FeeInvoice, InvoiceStatus, Payment } from "@/types";
 
 export default function StudentFinancePage() {
@@ -106,8 +107,8 @@ export default function StudentFinancePage() {
     paymentMutation.mutate(inv.id);
   };
 
-  const invoices = invoicesData?.data || [];
-  const payments = paymentsData?.data || [];
+  const invoices = extractDataArray<FeeInvoice>(invoicesData);
+  const payments = extractDataArray<Payment>(paymentsData);
 
   const getStatusBadge = (status: InvoiceStatus) => {
     switch (status) {

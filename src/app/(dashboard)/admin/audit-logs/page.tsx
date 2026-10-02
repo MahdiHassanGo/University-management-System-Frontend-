@@ -5,6 +5,7 @@ import { ShieldAlert } from "lucide-react";
 import { getAllAuditLogs } from "@/api/admin.api";
 import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
+import { extractDataArray } from "@/lib/utils";
 
 export default function AdminAuditLogsPage() {
   const { data, isLoading, isError, error } = useQuery({
@@ -12,7 +13,7 @@ export default function AdminAuditLogsPage() {
     queryFn: () => getAllAuditLogs(),
   });
 
-  const logs = data?.data || [];
+  const logs = extractDataArray(data);
 
   return (
     <div className="space-y-6">

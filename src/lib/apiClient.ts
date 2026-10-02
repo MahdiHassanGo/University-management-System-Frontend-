@@ -1,5 +1,5 @@
 import { ofetch } from "ofetch";
-import { getAccessToken } from "./auth-token";
+import { clearAccessToken, getAccessToken } from "./auth-token";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -16,11 +16,24 @@ export const apiClient = ofetch.create({
       options.headers = headers;
     }
   },
-  onResponseError({ response }) {
+  onResponseError({ request, response }) {
     const errorData = response._data;
     const message =
       errorData?.message || response.statusText || "Request failed";
-    console.error(`[API Error ${response.status}]`, message, errorData);
+    console.warn(`[API ${response.status}] ${request}:`, message);
+
+    // On 401 Unauthorized, if on a protected route in browser, clear token and redirect to login
+    if (response.status === 401 && typeof window !== "undefined") {
+      clearAccessToken();
+      const path = window.location.pathname;
+      if (
+        path.startsWith("/admin") ||
+        path.startsWith("/instructor") ||
+        path.startsWith("/student")
+      ) {
+        window.location.href = `/login?redirect=${encodeURIComponent(path)}`;
+      }
+    }
   },
 });
 

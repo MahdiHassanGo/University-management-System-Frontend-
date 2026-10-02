@@ -8,6 +8,7 @@ import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Enrollment } from "@/types";
 
 export default function StudentCoursesPage() {
@@ -41,7 +42,7 @@ export default function StudentCoursesPage() {
     },
   });
 
-  const enrollments = data?.data || [];
+  const enrollments = extractDataArray<Enrollment>(data);
   const activeEnrollments = enrollments.filter((e) => e.status === "ENROLLED");
 
   return (

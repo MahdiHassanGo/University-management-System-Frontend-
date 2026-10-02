@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Section } from "@/types";
 
 export default function InstructorResultsPage() {
@@ -54,7 +55,7 @@ export default function InstructorResultsPage() {
     queryFn: () => getInstructorSections(profile?.id),
     enabled: !!profile?.id,
   });
-  const sections: Section[] = sectionsData?.data || [];
+  const sections: Section[] = extractDataArray<Section>(sectionsData);
   const activeSectionId = selectedSectionId || (sections[0]?.id ?? "");
   const currentSection = sections.find((s) => s.id === activeSectionId);
 
@@ -64,13 +65,13 @@ export default function InstructorResultsPage() {
     queryFn: () => getSectionStudents(activeSectionId),
     enabled: !!activeSectionId,
   });
-  const students = studentsData?.data || [];
+  const students = extractDataArray(studentsData);
 
   // Calculate results mutation
   const calculateMutation = useMutation({
     mutationFn: () => calculateSectionResults(activeSectionId),
     onSuccess: (res) => {
-      setCalculatedResults(res?.data || []);
+      setCalculatedResults(extractDataArray(res));
       toast.add({
         title: "Calculation Complete",
         description:

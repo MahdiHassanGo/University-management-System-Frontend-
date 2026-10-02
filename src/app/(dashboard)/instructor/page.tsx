@@ -19,6 +19,7 @@ import {
 } from "@/api/instructor.api";
 import StatCard from "@/components/common/stat-card";
 import { Button } from "@/components/ui/button";
+import { extractDataArray } from "@/lib/utils";
 import type { Section } from "@/types";
 
 export default function InstructorOverviewPage() {
@@ -35,7 +36,7 @@ export default function InstructorOverviewPage() {
     enabled: !!profile?.id,
   });
 
-  const sections: Section[] = sectionsData?.data || [];
+  const sections: Section[] = extractDataArray<Section>(sectionsData);
   const totalStudents = sections.reduce(
     (acc, sec) => acc + (sec.enrolledCount || 0),
     0,

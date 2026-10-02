@@ -5,6 +5,7 @@ import { Award, FileCheck2 } from "lucide-react";
 import { getMyResults } from "@/api/student.api";
 import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
+import { extractDataArray } from "@/lib/utils";
 
 export default function StudentResultsPage() {
   const { data, isLoading, isError, error } = useQuery({
@@ -12,7 +13,7 @@ export default function StudentResultsPage() {
     queryFn: () => getMyResults(),
   });
 
-  const results = data?.data || [];
+  const results = extractDataArray(data);
 
   return (
     <div className="space-y-6">

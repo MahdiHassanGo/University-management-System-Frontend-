@@ -24,6 +24,7 @@ import {
 } from "@/api/admin.api";
 import StatCard from "@/components/common/stat-card";
 import { Button } from "@/components/ui/button";
+import { extractDataArray, extractPaginationMeta } from "@/lib/utils";
 
 export default function AdminOverviewPage() {
   const { data: studentsData, isLoading: loadingStudents } = useQuery({
@@ -47,12 +48,17 @@ export default function AdminOverviewPage() {
   });
 
   const totalStudents =
-    studentsData?.meta?.total ?? studentsData?.data?.length ?? 0;
+    extractPaginationMeta(studentsData).total ||
+    extractDataArray(studentsData).length;
   const totalInstructors =
-    instructorsData?.meta?.total ?? instructorsData?.data?.length ?? 0;
+    extractPaginationMeta(instructorsData).total ||
+    extractDataArray(instructorsData).length;
   const totalCourses =
-    coursesData?.meta?.total ?? coursesData?.data?.length ?? 0;
-  const totalSections = sectionsData?.data?.length ?? 0;
+    extractPaginationMeta(coursesData).total ||
+    extractDataArray(coursesData).length;
+  const totalSections =
+    extractPaginationMeta(sectionsData).total ||
+    extractDataArray(sectionsData).length;
 
   return (
     <div className="space-y-8">

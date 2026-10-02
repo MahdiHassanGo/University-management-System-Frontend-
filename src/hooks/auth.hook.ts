@@ -8,7 +8,11 @@ import {
   userLogout,
   userRegistration,
 } from "@/api";
-import { clearAccessToken, setAccessToken } from "@/lib/auth-token";
+import {
+  clearAccessToken,
+  getAccessToken,
+  setAccessToken,
+} from "@/lib/auth-token";
 
 export function useLogin() {
   const queryClient = useQueryClient();
@@ -74,5 +78,6 @@ export function useGetMe() {
     queryFn: getMe,
     retry: false,
     staleTime: 5 * 60 * 1000,
+    enabled: typeof window !== "undefined" && !!getAccessToken(),
   });
 }

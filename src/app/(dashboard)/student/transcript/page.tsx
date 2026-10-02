@@ -112,7 +112,8 @@ export default function StudentTranscriptPage() {
           </div>
 
           {/* Semesters Breakdown */}
-          {transcript.semesters && transcript.semesters.length > 0 ? (
+          {Array.isArray(transcript?.semesters) &&
+          transcript.semesters.length > 0 ? (
             transcript.semesters.map((termItem: any) => (
               <div
                 key={termItem.semesterId}
@@ -143,7 +144,10 @@ export default function StudentTranscriptPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y">
-                      {termItem.results?.map((cr: any) => (
+                      {(Array.isArray(termItem.results)
+                        ? termItem.results
+                        : []
+                      ).map((cr: any) => (
                         <tr key={cr.id} className="hover:bg-muted/30">
                           <td className="px-4 py-2.5 font-mono font-semibold text-foreground">
                             {cr.section?.course?.code || "—"}

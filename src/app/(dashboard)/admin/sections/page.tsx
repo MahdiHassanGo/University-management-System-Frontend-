@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Section } from "@/types";
 
 export default function AdminSectionsPage() {
@@ -49,7 +50,7 @@ export default function AdminSectionsPage() {
     },
   });
 
-  const sections = data?.data || [];
+  const sections = extractDataArray<Section>(data);
 
   return (
     <div className="space-y-6">

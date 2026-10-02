@@ -5,6 +5,7 @@ import { ClipboardList } from "lucide-react";
 import { getAllEnrollments } from "@/api/admin.api";
 import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
+import { extractDataArray } from "@/lib/utils";
 import type { Enrollment } from "@/types";
 
 export default function AdminEnrollmentsPage() {
@@ -13,7 +14,7 @@ export default function AdminEnrollmentsPage() {
     queryFn: () => getAllEnrollments(),
   });
 
-  const enrollments = data?.data || [];
+  const enrollments = extractDataArray<Enrollment>(data);
 
   return (
     <div className="space-y-6">

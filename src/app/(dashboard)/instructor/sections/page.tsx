@@ -18,6 +18,7 @@ import {
 import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
 import { Button } from "@/components/ui/button";
+import { extractDataArray } from "@/lib/utils";
 import type { Section } from "@/types";
 
 export default function InstructorSectionsPage() {
@@ -34,7 +35,7 @@ export default function InstructorSectionsPage() {
     enabled: !!profile?.id,
   });
 
-  const sections: Section[] = sectionsData?.data || [];
+  const sections: Section[] = extractDataArray<Section>(sectionsData);
 
   return (
     <div className="space-y-6">

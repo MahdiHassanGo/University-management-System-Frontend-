@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { FeeInvoice, InvoiceStatus } from "@/types";
 
 export default function AdminInvoicesPage() {
@@ -74,8 +75,8 @@ export default function AdminInvoicesPage() {
     });
   };
 
-  const invoices = data?.data || [];
-  const semesters = semestersData?.data || [];
+  const invoices = extractDataArray<FeeInvoice>(data);
+  const semesters = extractDataArray(semestersData);
 
   const getStatusBadge = (status: InvoiceStatus) => {
     switch (status) {

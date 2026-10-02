@@ -19,6 +19,7 @@ import {
   getMyTranscript,
 } from "@/api/student.api";
 import StatCard from "@/components/common/stat-card";
+import { extractDataArray } from "@/lib/utils";
 
 export default function StudentOverviewPage() {
   const { data: profileData } = useQuery({
@@ -42,8 +43,8 @@ export default function StudentOverviewPage() {
   });
 
   const profile = profileData?.data;
-  const enrollments = enrollmentsData?.data || [];
-  const invoices = invoicesData?.data || [];
+  const enrollments = extractDataArray(enrollmentsData);
+  const invoices = extractDataArray(invoicesData);
   const transcript = transcriptData?.data;
 
   const unpaidInvoices = invoices.filter(

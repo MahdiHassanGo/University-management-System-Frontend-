@@ -25,6 +25,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Exam, Section } from "@/types";
 
 export default function InstructorExamsPage() {
@@ -62,7 +63,7 @@ export default function InstructorExamsPage() {
     queryFn: () => getInstructorSections(profile?.id),
     enabled: !!profile?.id,
   });
-  const sections: Section[] = sectionsData?.data || [];
+  const sections: Section[] = extractDataArray<Section>(sectionsData);
   const activeSectionId = selectedSectionId || (sections[0]?.id ?? "");
 
   // Section exams
@@ -71,7 +72,7 @@ export default function InstructorExamsPage() {
     queryFn: () => getSectionExams(activeSectionId),
     enabled: !!activeSectionId,
   });
-  const exams: Exam[] = examsData?.data || [];
+  const exams: Exam[] = extractDataArray<Exam>(examsData);
   const activeExamId = selectedExamId || (exams[0]?.id ?? "");
   const currentExam = exams.find((e) => e.id === activeExamId);
 
@@ -81,7 +82,7 @@ export default function InstructorExamsPage() {
     queryFn: () => getSectionStudents(activeSectionId),
     enabled: !!activeSectionId,
   });
-  const students = studentsData?.data || [];
+  const students = extractDataArray(studentsData);
 
   // Existing marks for current exam
   const { data: existingMarksData } = useQuery({

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { AcademicSemester, SemesterStatus, SemesterTerm } from "@/types";
 
 export default function AdminSemestersPage() {
@@ -122,7 +123,7 @@ export default function AdminSemestersPage() {
     });
   };
 
-  const semesters = data?.data || [];
+  const semesters = extractDataArray<AcademicSemester>(data);
 
   const getStatusBadge = (status: SemesterStatus) => {
     switch (status) {

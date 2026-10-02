@@ -13,8 +13,12 @@ export default function StudentAttendancePage() {
   });
 
   const attendancePayload = data?.data;
-  const summary = attendancePayload?.summary || [];
-  const records = attendancePayload?.records || [];
+  const summary = Array.isArray(attendancePayload?.summary)
+    ? attendancePayload.summary
+    : [];
+  const records = Array.isArray(attendancePayload?.records)
+    ? attendancePayload.records
+    : [];
 
   return (
     <div className="space-y-6">

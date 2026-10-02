@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Department } from "@/types";
 
 export default function AdminDepartmentsPage() {
@@ -84,7 +85,7 @@ export default function AdminDepartmentsPage() {
     createMutation.mutate({ code: code.toUpperCase(), name });
   };
 
-  const departments = data?.data || [];
+  const departments = extractDataArray<Department>(data);
 
   return (
     <div className="space-y-6">

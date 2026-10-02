@@ -7,6 +7,7 @@ import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Section } from "@/types";
 
 export default function StudentCourseRegistrationPage() {
@@ -40,7 +41,7 @@ export default function StudentCourseRegistrationPage() {
     },
   });
 
-  const sections = data?.data || [];
+  const sections = extractDataArray<Section>(data);
 
   return (
     <div className="space-y-6">

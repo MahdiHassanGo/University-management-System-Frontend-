@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { isValidElement } from "react";
 
 interface StatCardProps {
   title: string;
@@ -17,8 +18,18 @@ export default function StatCard({
   trend,
   badgeClass = "bg-primary/10 text-primary",
 }: StatCardProps) {
-  const isComponent = typeof icon === "function";
-  const Icon = isComponent ? (icon as LucideIcon) : null;
+  const renderIcon = () => {
+    if (!icon) return null;
+    if (isValidElement(icon)) return icon;
+    if (
+      typeof icon === "function" ||
+      (typeof icon === "object" && icon !== null)
+    ) {
+      const IconComp = icon as any;
+      return <IconComp className="size-4" />;
+    }
+    return null;
+  };
 
   return (
     <div className="rounded-xl border bg-card p-5 shadow-xs hover:shadow-sm transition-all space-y-3">
@@ -29,7 +40,7 @@ export default function StatCard({
         <div
           className={`flex size-8 items-center justify-center rounded-lg ${badgeClass}`}
         >
-          {Icon ? <Icon className="size-4" /> : (icon as React.ReactNode)}
+          {renderIcon()}
         </div>
       </div>
 

@@ -59,11 +59,12 @@ export default function AdminReportsPage() {
   const finance = financeData?.data;
 
   // Prepare Program chart data
-  const programChartData =
-    enrollment?.enrollmentsByProgram?.map((p: any) => ({
-      name: p.programCode,
-      students: p.studentCount,
-    })) || [];
+  const programChartData = Array.isArray(enrollment?.enrollmentsByProgram)
+    ? enrollment.enrollmentsByProgram.map((p: any) => ({
+        name: p.programCode,
+        students: p.studentCount,
+      }))
+    : [];
 
   // Prepare Attendance breakdown data
   const attendanceChartData = attendance?.breakdown

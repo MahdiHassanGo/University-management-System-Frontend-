@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { Program } from "@/types";
 
 export default function AdminProgramsPage() {
@@ -105,8 +106,8 @@ export default function AdminProgramsPage() {
     });
   };
 
-  const programs = data?.data || [];
-  const departments = departmentsData?.data || [];
+  const programs = extractDataArray<Program>(data);
+  const departments = extractDataArray(departmentsData);
 
   return (
     <div className="space-y-6">

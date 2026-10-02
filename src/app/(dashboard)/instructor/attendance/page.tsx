@@ -30,6 +30,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray } from "@/lib/utils";
 import type { AttendanceSession, Section } from "@/types";
 
 type AttendanceStatusType = "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
@@ -68,7 +69,7 @@ export default function InstructorAttendancePage() {
     queryFn: () => getInstructorSections(profile?.id),
     enabled: !!profile?.id,
   });
-  const sections: Section[] = sectionsData?.data || [];
+  const sections: Section[] = extractDataArray<Section>(sectionsData);
 
   // Auto-select first section if not selected
   const activeSectionId = selectedSectionId || (sections[0]?.id ?? "");
@@ -79,7 +80,8 @@ export default function InstructorAttendancePage() {
     queryFn: () => getSectionAttendance(activeSectionId),
     enabled: !!activeSectionId,
   });
-  const sessions: AttendanceSession[] = sessionsData?.data || [];
+  const sessions: AttendanceSession[] =
+    extractDataArray<AttendanceSession>(sessionsData);
 
   // Auto-select first session if none selected
   const activeSessionId = selectedSessionId || (sessions[0]?.id ?? "");
@@ -90,7 +92,7 @@ export default function InstructorAttendancePage() {
     queryFn: () => getSectionStudents(activeSectionId),
     enabled: !!activeSectionId,
   });
-  const students = studentsData?.data || [];
+  const students = extractDataArray(studentsData);
 
   // Create session mutation
   const createSessionMutation = useMutation({

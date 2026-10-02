@@ -18,6 +18,7 @@ import { getSectionStudents } from "@/api/instructor.api";
 import EmptyState from "@/components/common/empty-state";
 import TableSkeleton from "@/components/common/table-skeleton";
 import { Button } from "@/components/ui/button";
+import { extractDataArray } from "@/lib/utils";
 
 export default function InstructorSectionDetailPage() {
   const params = useParams();
@@ -36,7 +37,7 @@ export default function InstructorSectionDetailPage() {
   });
 
   const section = sectionData?.data;
-  const enrollments = studentsData?.data || [];
+  const enrollments = extractDataArray(studentsData);
 
   return (
     <div className="space-y-6">

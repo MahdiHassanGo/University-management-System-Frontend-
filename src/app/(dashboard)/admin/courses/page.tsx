@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { extractDataArray, extractPaginationMeta } from "@/lib/utils";
 import type { Course } from "@/types";
 
 function CoursesTableContent() {
@@ -119,9 +120,9 @@ function CoursesTableContent() {
     });
   };
 
-  const courses = data?.data || [];
-  const meta = data?.meta;
-  const departments = departmentsData?.data || [];
+  const courses = extractDataArray<Course>(data);
+  const meta = extractPaginationMeta(data);
+  const departments = extractDataArray(departmentsData);
 
   return (
     <div className="space-y-6">
