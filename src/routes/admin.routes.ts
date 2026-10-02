@@ -90,4 +90,14 @@ export const adminRoutes: SidebarItems = [
       },
     ],
   },
+  {
+    title: "Account",
+    items: [
+      {
+        title: "Security & Profile",
+        url: "/admin/profile",
+        icon: ShieldAlert,
+      },
+    ],
+  },
 ];
