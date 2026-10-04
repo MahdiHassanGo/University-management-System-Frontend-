@@ -61,6 +61,12 @@ function PaymentSuccessContent() {
             </div>
           )}
           <div className="flex justify-between">
+            <span className="text-muted-foreground">Gateway:</span>
+            <span className="font-semibold text-foreground">
+              {searchParams.get("gateway") || "bKash Sandbox"}
+            </span>
+          </div>
+          <div className="flex justify-between">
             <span className="text-muted-foreground">Status:</span>
             <span className="font-semibold text-emerald-600">
               PAID / SETTLED

@@ -53,11 +53,11 @@ This document contains the finalized submission parameters for the **B7A7 Univer
   - Mandatory 4-Step Create Section Wizard (`create-section-wizard.tsx`).
   - Zustand UI store (`use-ui-store.ts`) for mobile drawer state.
   - Optimistic UI updates on notification mark-as-read with TanStack Query rollback.
-  - SSLCommerz Test Mode hosted payment gateway integration with `/payment/success` and `/payment/cancel` callbacks.
+  - bKash Sandbox Tokenized Checkout hosted payment gateway integration with `/payment/success` and `/payment/cancel` callbacks.
   - Student finance invoice management and payment initiation.
 - [x] **Day 5: Polish & Quality**
   - Responsive layouts tested across 375px mobile, tablet, and desktop viewports.
   - 100% clean check under Biome 2.4.2 (0 errors, 0 warnings).
   - 100% clean check under TypeScript strict mode (0 errors).
-  - 100% clean Next.js production build (`40/40` static and dynamic routes compiled).
+  - 100% clean Next.js production build (`42/42` static and dynamic routes compiled).
   - 25+ conventional, structured commits pushed to GitHub.

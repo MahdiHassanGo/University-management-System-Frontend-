@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreditCard, Receipt, ShieldCheck } from "lucide-react";
+import { CreditCard, Receipt } from "lucide-react";
 import { useState } from "react";
 import {
   getMyInvoices,
@@ -81,7 +81,7 @@ export default function StudentFinancePage() {
   const handlePay = async (inv: FeeInvoice) => {
     setActivePayingId(inv.id);
     try {
-      const res = await fetch("/api/payment/sslcommerz/initiate", {
+      const res = await fetch("/api/payment/bkash/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,16 +89,17 @@ export default function StudentFinancePage() {
           amount: inv.amount,
           studentName: inv.student?.name,
           studentId: inv.student?.studentId,
+          studentPhone: (inv.student as any)?.contactNo || "01770618575",
         }),
       });
       const result = await res.json();
-      if (result.success && result.gatewayUrl) {
+      if (result.success && result.bkashURL) {
         toast.add({
-          title: "Connecting to SSLCommerz",
-          description: "Redirecting to secure test payment gateway...",
+          title: "Connecting to bKash Sandbox",
+          description: "Launching official bKash Tokenized Checkout portal...",
           type: "info",
         });
-        window.location.href = result.gatewayUrl;
+        window.location.href = result.bkashURL;
         return;
       }
     } catch {
@@ -133,18 +134,41 @@ export default function StudentFinancePage() {
         </p>
       </div>
 
-      {/* Gateway Trust Banner */}
-      <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2.5">
-          <ShieldCheck className="size-5 text-primary shrink-0" />
-          <div>
-            <div className="font-semibold text-foreground">
-              SSLCommerz / Online Gateway Active
+      {/* bKash Gateway Trust Banner & Test Credentials */}
+      <div className="rounded-xl border border-[#E2136E]/30 bg-[#E2136E]/5 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
+        <div className="flex items-start gap-3">
+          <div className="size-9 rounded-lg bg-[#E2136E] text-white flex items-center justify-center font-bold text-sm shrink-0">
+            ৳
+          </div>
+          <div className="space-y-0.5">
+            <div className="font-semibold text-foreground flex items-center gap-2">
+              <span>bKash Tokenized Checkout Sandbox</span>
+              <span className="rounded-full bg-[#E2136E]/15 text-[#E2136E] px-2 py-0.5 text-[10px] font-mono font-bold">
+                TEST MODE
+              </span>
             </div>
             <div className="text-muted-foreground">
-              Transactions are processed and verified securely via authorized
-              payment gateways.
+              Official bKash Payment Gateway integration. Click &ldquo;Pay with
+              bKash&rdquo; on any unpaid invoice to launch the live bKash
+              Sandbox portal.
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 bg-card border rounded-lg px-3 py-2 shrink-0">
+          <div className="text-[11px]">
+            <span className="text-muted-foreground">Wallet:</span>{" "}
+            <code className="font-mono font-bold text-foreground">
+              01770618575
+            </code>
+          </div>
+          <div className="text-[11px]">
+            <span className="text-muted-foreground">OTP:</span>{" "}
+            <code className="font-mono font-bold text-foreground">123456</code>
+          </div>
+          <div className="text-[11px]">
+            <span className="text-muted-foreground">PIN:</span>{" "}
+            <code className="font-mono font-bold text-foreground">12121</code>
           </div>
         </div>
       </div>
@@ -225,7 +249,7 @@ export default function StudentFinancePage() {
                               size="sm"
                               disabled={isPaying}
                               onClick={() => handlePay(inv)}
-                              className="h-7 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs font-semibold"
+                              className="h-7 text-xs gap-1.5 bg-[#E2136E] hover:bg-[#c20f5e] text-white shadow-xs font-semibold"
                             >
                               {isPaying ? (
                                 <>
@@ -234,8 +258,8 @@ export default function StudentFinancePage() {
                                 </>
                               ) : (
                                 <>
-                                  <CreditCard className="size-3" />
-                                  <span>Pay Now</span>
+                                  <span className="font-bold text-xs">৳</span>
+                                  <span>Pay with bKash</span>
                                 </>
                               )}
                             </Button>

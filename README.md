@@ -85,16 +85,22 @@ The login page includes **Mandatory 1-Click Real Authentication Buttons** that a
 
 ---
 
-## 💳 Payment Architecture (SSLCommerz Test Mode)
+## 💳 Payment Architecture (bKash Tokenized Checkout Sandbox)
 
-In accordance with B7A7 mandatory guidelines, the application implements real payment gateway initiation and hosted redirection:
-1. **Initiation**: Student clicks "Pay Now" on an outstanding invoice (`/student/finance`).
-2. **Gateway Dispatch**: The request routes via `src/app/api/payment/sslcommerz/initiate` or backend payment gateway to SSLCommerz Sandbox (`https://sandbox.sslcommerz.com/gwprocess/v4/api.php`).
-3. **Hosted Portal**: The scholar is redirected to SSLCommerz hosted checkout portal.
-4. **Authoritative Callback**:
-   - Success redirect: `/payment/success?tran_id=...&amount=...` with confetti visual confirmation.
-   - Cancel redirect: `/payment/cancel` with safe return options.
-5. **No Client-Side State Faking**: Invoices are never marked paid client-side; authoritative status updates occur server-side.
+In accordance with B7A7 guidelines, the application implements real payment gateway initiation and hosted checkout redirection with bKash Sandbox (API v1.2.0-beta):
+1. **Initiation**: Student clicks **"Pay with bKash"** on an outstanding invoice (`/student/finance`).
+2. **Gateway Dispatch**: The request routes via `src/app/api/payment/bkash/initiate` or backend payment gateway to bKash Sandbox (`https://tokenized.sandbox.bka.sh/v1.2.0-beta`).
+3. **Hosted Checkout Portal**: The scholar is redirected to the official bKash hosted checkout page (`https://sandbox.payment.bkash.com/?paymentId=...`).
+4. **Test Credentials**:
+   - **Wallet Number**: `01770618575` (or any valid 11-digit mobile number)
+   - **Test OTP**: `123456`
+   - **Test PIN**: `12121`
+5. **Authoritative Server Callback & Execution**:
+   - The gateway posts back to `/api/payment/bkash/callback`.
+   - Server-side tokenized payment execution (`/tokenized/checkout/execute`) confirms transaction settlement.
+   - Success redirect: `/payment/success?paymentId=...&trxID=...&amount=...&gateway=bKash` with confetti visual confirmation and printable receipt.
+   - Cancel redirect: `/payment/cancel` with safe return to finance portal.
+6. **No Client-Side State Faking**: Invoices are never marked paid client-side; authoritative status updates occur server-side.
 
 ---
 

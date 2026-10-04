@@ -12,7 +12,7 @@ This guide provides a professional, minute-by-minute script and execution checkl
 | **1:00 – 2:00** | **Authentication & One-Click Demo** | `/login`, Demo Buttons (Super Admin, Instructor, Student), Zod Form Validation | Real backend authentication, JWT cookies (`ums_access_token`), edge `middleware.ts` route protection, Zod validation errors on invalid inputs |
 | **2:00 – 3:30** | **Super Admin Console** | `/admin`, Students (`/admin/students`), Sections & Wizard (`/admin/sections`), Analytics (`/admin/reports`) | URL-synced debounced search & pagination, 4-step Section Wizard with TanStack Form, 4 Recharts visual charts based on real backend metrics |
 | **3:30 – 5:00** | **Faculty Workspace (Instructor)** | `/instructor`, Assigned Sections (`/instructor/sections`), Attendance Sheet (`/instructor/attendance`), Exam Scores & Grade Publishing (`/instructor/results`) | Section seat progress bars, bulk attendance marking with *"Mark All Present"*, score entry matrix, automated grade calculations and confirmation dialog |
-| **5:00 – 6:30** | **Student Academic Portal & Payments** | `/student`, Course Registration (`/student/registration`), Attendance & Results, Student Finance (`/student/finance`) | Real-time seat availability, 1-click course enrollment & drop, official CGPA transcript, SSLCommerz Test Mode hosted payment gateway |
+| **5:00 – 6:30** | **Student Academic Portal & Payments** | `/student`, Course Registration (`/student/registration`), Attendance & Results, Student Finance (`/student/finance`) | Real-time seat availability, 1-click course enrollment & drop, official CGPA transcript, bKash Sandbox Tokenized Checkout hosted payment gateway |
 | **6:30 – 7:30** | **Optimistic UI, Responsiveness & Wrap-up** | Notification mark-as-read, Mobile drawer viewport (375px), DevTools inspect | TanStack Query `onMutate` optimistic updates with cache snapshot & rollback, responsive drawers, Biome & TypeScript 0-warning guarantee |
 
 ---
@@ -85,7 +85,7 @@ This guide provides a professional, minute-by-minute script and execution checkl
   > *"The Official Transcript organizes all completed semesters, calculating term GPAs and cumulative CGPAs using authoritative server data."*
 - **Action**: Navigate to `/student/finance`.
 - **Narration**:
-  > *"In Student Finance, scholars track tuition invoices and payment receipts. Clicking 'Pay Now' initiates our SSLCommerz Test Mode hosted payment flow, taking the scholar to the secure checkout gateway, and returning them to our payment success screen with confetti confirmation upon verification."*
+  > *"In Student Finance, scholars track tuition invoices and payment receipts. Clicking 'Pay with bKash' initiates our bKash Sandbox Tokenized Checkout flow, launching the live bKash hosted portal where students can enter demo credentials (Wallet: 01770618575, OTP: 123456, PIN: 12121), completing authoritative server execution and returning to our verified payment confirmation receipt."*
 
 ---
 
