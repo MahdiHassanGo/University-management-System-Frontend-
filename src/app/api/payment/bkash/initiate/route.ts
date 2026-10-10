@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const bkashData = await createBkashPayment({
       amount,
       merchantInvoiceNumber,
-      payerReference: studentPhone || "01770618575",
+      payerReference: studentPhone || "01619777283",
       callbackURL,
     });
 

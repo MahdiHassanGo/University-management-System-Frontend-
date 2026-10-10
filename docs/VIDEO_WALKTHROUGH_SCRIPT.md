@@ -85,7 +85,7 @@ This guide provides a professional, minute-by-minute script and execution checkl
   > *"The Official Transcript organizes all completed semesters, calculating term GPAs and cumulative CGPAs using authoritative server data."*
 - **Action**: Navigate to `/student/finance`.
 - **Narration**:
-  > *"In Student Finance, scholars track tuition invoices and payment receipts. Clicking 'Pay with bKash' initiates our bKash Sandbox Tokenized Checkout flow, launching the live bKash hosted portal where students can enter demo credentials (Wallet: 01770618575, OTP: 123456, PIN: 12121), completing authoritative server execution and returning to our verified payment confirmation receipt."*
+  > *"In Student Finance, scholars track tuition invoices and payment receipts. Clicking 'Pay with bKash' initiates our bKash Sandbox Tokenized Checkout flow, launching the live bKash hosted portal where students can enter demo credentials (Wallet: 01619777283, OTP: 123456, PIN: 12121), completing authoritative server execution and returning to our verified payment confirmation receipt."*
 
 ---
 

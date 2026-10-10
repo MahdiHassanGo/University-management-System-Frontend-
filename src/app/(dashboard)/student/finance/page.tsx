@@ -89,7 +89,7 @@ export default function StudentFinancePage() {
           amount: inv.amount,
           studentName: inv.student?.name,
           studentId: inv.student?.studentId,
-          studentPhone: (inv.student as any)?.contactNo || "01770618575",
+          studentPhone: (inv.student as any)?.contactNo || "01619777283",
         }),
       });
       const result = await res.json();
@@ -157,10 +157,13 @@ export default function StudentFinancePage() {
 
         <div className="flex flex-wrap items-center gap-3 bg-card border rounded-lg px-3 py-2 shrink-0">
           <div className="text-[11px]">
-            <span className="text-muted-foreground">Wallet:</span>{" "}
+            <span className="text-muted-foreground">Test Wallet:</span>{" "}
             <code className="font-mono font-bold text-foreground">
-              01770618575
+              01619777283
             </code>
+            <span className="text-muted-foreground text-[10px] ml-1">
+              (or 01619777282)
+            </span>
           </div>
           <div className="text-[11px]">
             <span className="text-muted-foreground">OTP:</span>{" "}

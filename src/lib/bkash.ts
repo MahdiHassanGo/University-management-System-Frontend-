@@ -104,7 +104,7 @@ export async function createBkashPayment(params: {
     },
     body: JSON.stringify({
       mode: "0011",
-      payerReference: params.payerReference || "01770618575",
+      payerReference: params.payerReference || "01619777283",
       callbackURL: params.callbackURL,
       amount: numAmount,
       currency: "BDT",

@@ -94,7 +94,7 @@ In accordance with B7A7 guidelines, the application implements real payment gate
 2. **Gateway Dispatch**: The request routes via `src/app/api/payment/bkash/initiate` or backend payment gateway to bKash Sandbox (`https://tokenized.sandbox.bka.sh/v1.2.0-beta`).
 3. **Hosted Checkout Portal**: The scholar is redirected to the official bKash hosted checkout page (`https://sandbox.payment.bkash.com/?paymentId=...`).
 4. **Test Credentials**:
-   - **Wallet Number**: `01770618575` (or any valid 11-digit mobile number)
+   - **Wallet Number**: `01619777283` (or `01619777282` / `01929918378`)
    - **Test OTP**: `123456`
    - **Test PIN**: `12121`
 5. **Authoritative Server Callback & Execution**:
