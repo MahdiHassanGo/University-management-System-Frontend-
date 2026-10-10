@@ -7,6 +7,17 @@ import {
   Zap,
 } from "lucide-react";
 
+export const metadata = {
+  title: "Features",
+  description:
+    "Explore registration, attendance, assessments, transcripts, and secure tuition payments.",
+  openGraph: {
+    title: "Features",
+    description:
+      "Explore registration, attendance, assessments, transcripts, and secure tuition payments.",
+  },
+};
+
 export default function FeaturesPage() {
   const features = [
     {
@@ -16,13 +27,13 @@ export default function FeaturesPage() {
     },
     {
       icon: ShieldCheck,
-      title: "Strict Role-Based Security",
-      desc: "Engineered with dual-layer route protection: Next.js middleware edge enforcement coupled with backend JWT and database verification.",
+      title: "Separate, Secure Workspaces",
+      desc: "Students, instructors, and administrators have dedicated workspaces with access to the records and actions appropriate to their role.",
     },
     {
       icon: RefreshCw,
-      title: "Optimistic State Updates",
-      desc: "Instant UI responsiveness for daily tasks like marking notifications as read with automatic rollback on network failure.",
+      title: "Campus Notifications",
+      desc: "Keep up with updates to your courses, results, and payments. Mark messages as read and find them again when you need them.",
     },
     {
       icon: BarChart3,

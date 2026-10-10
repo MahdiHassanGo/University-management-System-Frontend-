@@ -1,0 +1,1 @@
+These screenshots show the revised interface at desktop/mobile sizes. Finance values and identities are isolated UI test fixtures, not live database records or proof of a real gateway transaction. Browser test fixtures are not included in application source.

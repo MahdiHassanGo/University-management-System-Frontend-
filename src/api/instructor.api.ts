@@ -2,9 +2,11 @@ import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
   AttendanceSession,
+  CourseResult,
   Exam,
   ExamResult,
   InstructorProfile,
+  ListResponse,
   Section,
   StudentProfile,
 } from "@/types";
@@ -24,8 +26,8 @@ export function updateMyInstructorProfile(payload: {
 }
 
 export function getInstructorSections(instructorId?: string) {
-  return apiClient<ApiResponse<Section[]>>("/sections", {
-    params: instructorId ? { instructorId } : undefined,
+  return apiClient<ListResponse<Section>>("/sections", {
+    params: { limit: 100, ...(instructorId ? { instructorId } : {}) },
   });
 }
 
@@ -34,6 +36,7 @@ export function getSectionStudents(sectionId: string) {
     ApiResponse<
       Array<{
         id: string;
+        studentId: string;
         student: StudentProfile;
         status: string;
         enrolledAt: string;
@@ -47,7 +50,6 @@ export function createAttendanceSession(
   payload: {
     sessionDate: string;
     startTime: string;
-    endTime: string;
     topic?: string;
   },
 ) {
@@ -55,15 +57,20 @@ export function createAttendanceSession(
     `/sections/${sectionId}/attendance-sessions`,
     {
       method: "POST",
-      body: payload,
+      body: {
+        heldAt: new Date(
+          `${payload.sessionDate}T${payload.startTime || "09:00"}:00+06:00`,
+        ).toISOString(),
+        topic: payload.topic,
+      },
     },
-  );
+  ).then((response) => ({ ...response, data: mapSession(response.data) }));
 }
 
 export function getSectionAttendance(sectionId: string) {
   return apiClient<ApiResponse<AttendanceSession[]>>(
     `/sections/${sectionId}/attendance`,
-  );
+  ).then(mapSessions);
 }
 
 export function bulkMarkAttendance(
@@ -76,11 +83,17 @@ export function bulkMarkAttendance(
     }>;
   },
 ) {
-  return apiClient<ApiResponse<any>>(
+  return apiClient<ApiResponse<unknown>>(
     `/attendance/sessions/${sessionId}/records/bulk`,
     {
       method: "POST",
-      body: payload,
+      body: {
+        records: payload.records.map((record) => ({
+          studentId: record.studentId,
+          status: record.status,
+          note: record.remark,
+        })),
+      },
     },
   );
 }
@@ -99,22 +112,37 @@ export function createSectionExam(
 ) {
   return apiClient<ApiResponse<Exam>>(`/sections/${sectionId}/exams`, {
     method: "POST",
-    body: payload,
-  });
+    body: {
+      title: payload.name,
+      totalMarks: payload.maxMarks,
+      weightPercentage: payload.weightage,
+      heldAt: payload.examDate,
+    },
+  }).then((response) => ({ ...response, data: mapExam(response.data) }));
 }
 
 export function getSectionExams(sectionId: string) {
-  return apiClient<ApiResponse<Exam[]>>(`/sections/${sectionId}/exams`);
+  return apiClient<ApiResponse<Exam[]>>(`/sections/${sectionId}/exams`).then(
+    (response) => ({ ...response, data: response.data.map(mapExam) }),
+  );
 }
 
 export function deleteExam(examId: string) {
-  return apiClient<ApiResponse<any>>(`/exams/${examId}`, {
+  return apiClient<ApiResponse<unknown>>(`/exams/${examId}`, {
     method: "DELETE",
   });
 }
 
 export function getExamResults(examId: string) {
-  return apiClient<ApiResponse<ExamResult[]>>(`/exams/${examId}/results`);
+  return apiClient<ApiResponse<ExamResult[]>>(`/exams/${examId}/results`).then(
+    (response) => ({
+      ...response,
+      data: response.data.map((result) => ({
+        ...result,
+        obtainedMarks: (result as ExamResult & { marks: number }).marks,
+      })),
+    }),
+  );
 }
 
 export function bulkMarkExamResults(
@@ -127,14 +155,19 @@ export function bulkMarkExamResults(
     }>;
   },
 ) {
-  return apiClient<ApiResponse<any>>(`/exams/${examId}/results/bulk`, {
+  return apiClient<ApiResponse<unknown>>(`/exams/${examId}/results/bulk`, {
     method: "POST",
-    body: payload,
+    body: {
+      results: payload.marks.map((entry) => ({
+        studentId: entry.studentId,
+        marks: entry.obtainedMarks,
+      })),
+    },
   });
 }
 
 export function calculateSectionResults(sectionId: string) {
-  return apiClient<ApiResponse<any>>(
+  return apiClient<ApiResponse<CourseResult[]>>(
     `/sections/${sectionId}/results/calculate`,
     {
       method: "POST",
@@ -143,7 +176,34 @@ export function calculateSectionResults(sectionId: string) {
 }
 
 export function publishSectionResults(sectionId: string) {
-  return apiClient<ApiResponse<any>>(`/sections/${sectionId}/results/publish`, {
-    method: "PATCH",
-  });
+  return apiClient<ApiResponse<unknown>>(
+    `/sections/${sectionId}/results/publish`,
+    {
+      method: "PATCH",
+    },
+  );
+}
+
+function mapSession(session: AttendanceSession) {
+  const raw = session as AttendanceSession & { heldAt: string };
+  return { ...session, sessionDate: raw.heldAt };
+}
+function mapSessions(response: ApiResponse<AttendanceSession[]>) {
+  return { ...response, data: response.data.map(mapSession) };
+}
+function mapExam(exam: Exam) {
+  const raw = exam as Exam & {
+    title: string;
+    totalMarks: number;
+    weightPercentage: number;
+    heldAt?: string;
+  };
+  return {
+    ...exam,
+    name: raw.title,
+    maxMarks: raw.totalMarks,
+    weightage: raw.weightPercentage,
+    examDate: raw.heldAt || "",
+    examType: "Assessment",
+  };
 }

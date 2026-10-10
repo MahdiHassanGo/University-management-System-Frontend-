@@ -17,7 +17,10 @@ export default function DashboardShell({
         <DashboardSidebar role={role} />
         <SidebarInset className="flex flex-1 flex-col overflow-x-hidden">
           <DashboardHeader role={role} />
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          <main
+            id="main-content"
+            className="dashboard-main flex-1 bg-background p-4 sm:p-7 lg:p-10"
+          >
             <div className="mx-auto max-w-7xl">{children}</div>
           </main>
         </SidebarInset>

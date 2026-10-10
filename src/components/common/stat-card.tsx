@@ -25,14 +25,14 @@ export default function StatCard({
       typeof icon === "function" ||
       (typeof icon === "object" && icon !== null)
     ) {
-      const IconComp = icon as any;
+      const IconComp = icon as LucideIcon;
       return <IconComp className="size-4" />;
     }
     return null;
   };
 
   return (
-    <div className="rounded-xl border bg-card p-5 shadow-xs hover:shadow-sm transition-all space-y-3">
+    <div className="rounded-xl border bg-card p-6 shadow-xs hover:shadow-sm transition-all space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {title}
@@ -45,7 +45,7 @@ export default function StatCard({
       </div>
 
       <div className="space-y-1">
-        <div className="text-2xl font-bold tracking-tight text-foreground">
+        <div className="text-3xl font-semibold tabular-nums tracking-tight text-foreground">
           {value}
         </div>
         {(subtitle || trend) && (

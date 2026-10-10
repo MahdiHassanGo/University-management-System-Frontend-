@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { getMe } from "@/api";
 import { toast } from "@/components/ui/toast";
 import { useGoogleOAuth } from "@/hooks";
+import { getErrorMessage } from "@/lib/errors";
 
 export default function GoogleLoginComponent() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate: loginWithGoogle } = useGoogleOAuth();
 
+  if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) return null;
   return (
     <div className="flex justify-center w-full">
       <ReactGoogleLogin
@@ -52,13 +54,10 @@ export default function GoogleLoginComponent() {
 
                 router.push(target);
               },
-              onError: (err: any) => {
+              onError: (err: unknown) => {
                 toast.add({
                   title: "Authentication Error",
-                  description:
-                    err?.data?.message ||
-                    err?.message ||
-                    "Google sign-in failed",
+                  description: getErrorMessage(err) || "Google sign-in failed",
                   type: "error",
                 });
               },

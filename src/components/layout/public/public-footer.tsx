@@ -1,4 +1,3 @@
-import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/common/Logo";
 
@@ -99,20 +98,15 @@ export default function PublicFooter() {
             <h3 className="text-sm font-semibold text-foreground tracking-wide uppercase">
               Campus Contact
             </h3>
-            <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <MapPin className="size-4 shrink-0 text-primary" />
-                <span>124 University Avenue, Academic Square</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="size-4 shrink-0 text-primary" />
-                <span>+880 (2) 887-2100</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="size-4 shrink-0 text-primary" />
-                <span>registrar@university.edu</span>
-              </li>
-            </ul>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Questions about your academic record, account, or payment?
+            </p>
+            <Link
+              href="/contact"
+              className="mt-4 inline-block text-sm font-semibold text-primary"
+            >
+              Contact campus support →
+            </Link>
           </div>
         </div>
 
@@ -126,13 +120,13 @@ export default function PublicFooter() {
               href="/about"
               className="hover:text-primary transition-colors"
             >
-              Privacy Policy
+              About UniCore
             </Link>
             <Link
-              href="/about"
+              href="/academics"
               className="hover:text-primary transition-colors"
             >
-              Terms of Enrollment
+              Academic information
             </Link>
             <Link
               href="/contact"

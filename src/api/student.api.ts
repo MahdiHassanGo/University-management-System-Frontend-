@@ -5,6 +5,8 @@ import type {
   CourseResult,
   Enrollment,
   FeeInvoice,
+  ListResponse,
+  PaginationParams,
   Payment,
   Section,
   StudentProfile,
@@ -25,11 +27,13 @@ export function updateMyStudentProfile(payload: {
   });
 }
 
-export function getAvailableSections(params?: {
-  courseId?: string;
-  semesterId?: string;
-}) {
-  return apiClient<ApiResponse<Section[]>>("/sections/available", {
+export function getAvailableSections(
+  params?: PaginationParams & {
+    courseId?: string;
+    semesterId?: string;
+  },
+) {
+  return apiClient<ListResponse<Section>>("/sections/available", {
     params,
   });
 }
@@ -57,13 +61,13 @@ export function getMyEnrollments() {
 export function getMyAttendance() {
   return apiClient<
     ApiResponse<{
-      summary: Array<{
+      summaries: Array<{
         sectionId: string;
         courseCode: string;
         courseTitle: string;
         totalSessions: number;
         presentCount: number;
-        attendancePercentage: number;
+        percentage: number;
       }>;
       records: AttendanceRecord[];
     }>
@@ -86,9 +90,7 @@ export function initiatePayment(invoiceId: string) {
   return apiClient<
     ApiResponse<{
       paymentId: string;
-      paymentID?: string;
-      bkashURL?: string;
-      sslcommerzGatewayUrl?: string;
+      gatewayUrl: string;
       merchantInvoiceNumber: string;
       amount: number;
     }>

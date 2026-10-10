@@ -1,0 +1,79 @@
+{
+  "checks": [
+    {
+      "route": "",
+      "width": 1440,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "login",
+      "width": 1440,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "contact",
+      "width": 1440,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "student/finance",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "route": "payment/pending",
+      "width": 1440,
+      "paidClaim": 0
+    },
+    {
+      "route": "",
+      "width": 390,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "login",
+      "width": 390,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "contact",
+      "width": 390,
+      "overflow": false,
+      "credentialsVisible": false
+    },
+    {
+      "route": "student/finance",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "route": "payment/pending",
+      "width": 390,
+      "paidClaim": 0
+    },
+    {
+      "unauthRedirect": true
+    },
+    {
+      "forgedTokenRedirect": true
+    },
+    {
+      "wrongRoleRedirect": true
+    },
+    {
+      "contactValidation": 2
+    },
+    {
+      "departmentEdit": true
+    },
+    {
+      "departmentValidation": 1
+    }
+  ],
+  "errors": []
+}

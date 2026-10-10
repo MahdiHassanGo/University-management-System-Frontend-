@@ -18,6 +18,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useRegistration } from "@/hooks";
 import apiClient from "@/lib/apiClient";
+import { getErrorMessage } from "@/lib/errors";
+import { extractDataArray } from "@/lib/utils";
 import type { AcademicSemester, ApiResponse, Program } from "@/types";
 import { registerSchema } from "@/validation";
 
@@ -30,17 +32,23 @@ export default function RegisterForm() {
   // Fetch dynamic programs from real backend
   const { data: programsData, isLoading: isLoadingPrograms } = useQuery({
     queryKey: ["programs", "catalog"],
-    queryFn: () => apiClient<ApiResponse<Program[]>>("/programs"),
+    queryFn: () =>
+      apiClient<ApiResponse<Program[]>>("/public/programs", {
+        params: { isActive: true, limit: 100 },
+      }),
   });
 
   // Fetch dynamic semesters from real backend
   const { data: semestersData, isLoading: isLoadingSemesters } = useQuery({
     queryKey: ["semesters", "catalog"],
-    queryFn: () => apiClient<ApiResponse<AcademicSemester[]>>("/semesters"),
+    queryFn: () =>
+      apiClient<ApiResponse<AcademicSemester[]>>("/public/semesters", {
+        params: { status: "REGISTRATION_OPEN", limit: 100 },
+      }),
   });
 
-  const programs = programsData?.data || [];
-  const semesters = semestersData?.data || [];
+  const programs = extractDataArray(programsData);
+  const semesters = extractDataArray(semestersData);
 
   const form = useForm({
     defaultValues: {
@@ -68,7 +76,7 @@ export default function RegisterForm() {
           contactNo: value.contactNo || undefined,
         },
         {
-          onSuccess: (res: any) => {
+          onSuccess: (res) => {
             const studentId = res?.data?.studentId;
             toast.add({
               title: "Admission Registered",
@@ -79,10 +87,9 @@ export default function RegisterForm() {
             });
             router.push("/login");
           },
-          onError: (err: any) => {
+          onError: (err: unknown) => {
             const errorMsg =
-              err?.data?.message ||
-              err?.message ||
+              getErrorMessage(err) ||
               "Registration failed. Please check the details and try again.";
             toast.add({
               title: "Registration Failed",
@@ -255,7 +262,11 @@ export default function RegisterForm() {
                     id={field.name}
                     name={field.name}
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value as any)}
+                    onChange={(e) =>
+                      field.handleChange(
+                        e.target.value as "MALE" | "FEMALE" | "OTHER",
+                      )
+                    }
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus:border-primary focus:outline-hidden"
                   >
                     <option value="MALE">Male</option>

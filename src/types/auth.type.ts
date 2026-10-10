@@ -79,7 +79,7 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-  accessToken: string;
+  authenticated: boolean;
   needPasswordChange?: boolean;
 }
 
@@ -96,4 +96,10 @@ export interface RegistrationPayload {
 export interface ChangePasswordPayload {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface AuthProfile extends Partial<User> {
+  id: string;
+  name?: string;
+  user?: User;
 }

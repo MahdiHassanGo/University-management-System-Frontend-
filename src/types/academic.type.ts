@@ -44,10 +44,11 @@ export interface Course {
   id: string;
   code: string;
   title: string;
-  credits: number;
+  credit: number;
   departmentId: string;
   department?: Department;
-  isElective: boolean;
+  isActive: boolean;
+  courseLevel: number;
   description?: string;
   syllabus?: string;
   prerequisites?: Array<{
@@ -142,12 +143,14 @@ export interface AttendanceRecord {
     name: string;
   };
   status: AttendanceStatus;
-  remarks?: string;
+  note?: string;
+  session?: AttendanceSession;
 }
 
 export interface AttendanceSession {
   id: string;
   sectionId: string;
+  heldAt?: string;
   sessionDate: string;
   startTime: string;
   endTime: string;
@@ -184,34 +187,41 @@ export interface ExamResult {
 
 export interface CourseResult {
   id: string;
-  studentId: string;
-  sectionId: string;
-  section?: Section;
+  enrollmentId: string;
+  enrollment?: Enrollment;
   totalMarks: number;
-  grade: string;
-  gradePoints: number;
-  status: ResultStatus;
-  calculatedAt?: string;
+  letterGrade: string;
+  gradePoint: number;
+  publicationStatus: ResultStatus;
   publishedAt?: string;
 }
-
+export interface TranscriptCourse {
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  credit: number;
+  letterGrade: string;
+  gradePoint: number;
+}
 export interface TranscriptSemester {
   semesterId: string;
-  semesterName: string;
   year: number;
   term: SemesterTerm;
-  semesterGpa: number;
-  semesterCredits: number;
-  results: CourseResult[];
+  gpa: number;
+  totalCredits: number;
+  courses: TranscriptCourse[];
 }
-
 export interface Transcript {
-  studentId: string;
-  studentName: string;
-  programName: string;
-  departmentName: string;
+  student: {
+    id: string;
+    studentId: string;
+    name: string;
+    academicStatus: string;
+    program: { code: string; name: string; department: string };
+    admissionSemester: string;
+  };
   cgpa: number;
-  totalCreditsCompleted: number;
+  totalEarnedCredits: number;
   semesters: TranscriptSemester[];
 }
 
@@ -250,7 +260,7 @@ export interface AppNotification {
   type: string;
   title: string;
   message: string;
-  isRead: boolean;
+  readAt?: string;
   relatedEntityId?: string;
   createdAt: string;
 }
@@ -290,4 +300,15 @@ export interface FinanceReport {
   totalUnpaidAmount: number;
   successfulPaymentsCount: number;
   collectionRate: number;
+}
+
+export interface AuditLog {
+  id: string;
+  actorId: string;
+  actor?: { email: string };
+  action: string;
+  entityType: string;
+  entityId?: string;
+  createdAt: string;
+  metadata?: Record<string, unknown>;
 }

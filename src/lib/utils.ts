@@ -1,35 +1,33 @@
+import type { ApiResponse } from "@/types";
+
 export { cn } from "cn";
-
-/**
- * Defensively extracts an array from any API response structure:
- * - Direct array: `[ ... ]`
- * - Standard ApiResponse: `{ data: [ ... ] }`
- * - Paginated ApiResponse: `{ data: { items: [ ... ], meta: { ... } } }`
- * - Nested data: `{ data: { data: [ ... ] } }`
- * - Items property: `{ items: [ ... ] }`
- */
-export function extractDataArray<T = any>(res: any): T[] {
-  if (!res) return [];
-  if (Array.isArray(res)) return res;
-  if (Array.isArray(res?.data)) return res.data;
-  if (Array.isArray(res?.data?.items)) return res.data.items;
-  if (Array.isArray(res?.data?.data)) return res.data.data;
-  if (Array.isArray(res?.items)) return res.items;
-  if (Array.isArray(res?.result)) return res.result;
-  return [];
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }
-
-/**
- * Defensively extracts pagination meta from API responses
- */
-export function extractPaginationMeta(res: any) {
-  return (
-    res?.data?.meta ||
-    res?.meta || {
-      page: 1,
-      limit: 10,
-      total: 0,
-      totalPages: 1,
-    }
-  );
+export interface PaginatedData<T> {
+  items: T[];
+  meta: PaginationMeta;
+}
+export function extractDataArray<T>(
+  response: ApiResponse<T[] | PaginatedData<T>> | T[] | undefined | null,
+): T[] {
+  if (!response) return [];
+  if (Array.isArray(response)) return response;
+  return Array.isArray(response.data)
+    ? response.data
+    : response.data?.items || [];
+}
+export function extractPaginationMeta(response: unknown): PaginationMeta {
+  if (response && typeof response === "object") {
+    const item = response as {
+      data?: { meta?: PaginationMeta };
+      meta?: PaginationMeta;
+    };
+    if (item.data?.meta) return item.data.meta;
+    if (item.meta) return item.meta;
+  }
+  return { page: 1, limit: 10, total: 0, totalPages: 1 };
 }

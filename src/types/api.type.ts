@@ -19,3 +19,9 @@ export interface PaginationParams {
   searchTerm?: string;
   [key: string]: string | number | boolean | undefined;
 }
+
+export interface PaginatedData<T> {
+  items: T[];
+  meta: { page: number; limit: number; total: number; totalPages: number };
+}
+export type ListResponse<T> = ApiResponse<T[] | PaginatedData<T>>;

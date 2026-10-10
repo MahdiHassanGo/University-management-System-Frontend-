@@ -4,17 +4,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { BookOpen, GraduationCap, Shield } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getMe, userLogin } from "@/api";
+import { getMe } from "@/api";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
-import { setAccessToken } from "@/lib/auth-token";
+import { getErrorMessage } from "@/lib/errors";
 
 interface DemoAccount {
   label: string;
   role: "SUPER_ADMIN" | "INSTRUCTOR" | "STUDENT";
-  email: string;
-  pass: string;
   icon: typeof Shield;
   badgeClass: string;
   targetDashboard: string;
@@ -24,8 +22,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     label: "Super Admin",
     role: "SUPER_ADMIN",
-    email: "admin@university.edu",
-    pass: "Admin123!",
     icon: Shield,
     badgeClass:
       "bg-purple-100 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300",
@@ -34,8 +30,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     label: "Instructor",
     role: "INSTRUCTOR",
-    email: "instructor@university.edu",
-    pass: "Instructor123!",
     icon: BookOpen,
     badgeClass:
       "bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300",
@@ -44,8 +38,6 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     label: "Student",
     role: "STUDENT",
-    email: "student@university.edu",
-    pass: "Student123!",
     icon: GraduationCap,
     badgeClass:
       "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300",
@@ -62,18 +54,18 @@ export default function DemoLoginButtons() {
     setActiveRole(acc.role);
 
     try {
-      // 1. Authenticate against real backend
-      const loginRes = await userLogin({
-        email: acc.email,
-        password: acc.pass,
+      const response = await fetch("/api/auth/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: acc.role }),
       });
-
-      if (!loginRes?.data?.accessToken) {
-        throw new Error("Missing access token in login response");
-      }
-
-      // 2. Establish session (sets cookie & localStorage)
-      setAccessToken(loginRes.data.accessToken);
+      const result = (await response.json()) as {
+        success?: boolean;
+        message?: string;
+      };
+      if (!response.ok || !result.success)
+        throw new Error(result.message || "Demo sign-in failed.");
+      queryClient.clear();
 
       // 3. Fetch authoritative profile
       const meRes = await queryClient.fetchQuery({
@@ -86,7 +78,7 @@ export default function DemoLoginButtons() {
 
       toast.add({
         title: `Welcome, ${acc.label}`,
-        description: `Authenticated successfully as ${acc.email}`,
+        description: "Your demo workspace is ready.",
         type: "success",
       });
 
@@ -99,13 +91,10 @@ export default function DemoLoginButtons() {
             : "/student";
 
       router.push(destination);
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.add({
         title: `Demo Login Failed`,
-        description:
-          err?.data?.message ||
-          err?.message ||
-          "Failed to authenticate demo user",
+        description: getErrorMessage(err) || "Failed to authenticate demo user",
         type: "error",
       });
     } finally {
@@ -116,7 +105,7 @@ export default function DemoLoginButtons() {
   return (
     <div className="space-y-2.5">
       <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">
-        1-Click Institutional Demo Login
+        Explore a workspace
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {DEMO_ACCOUNTS.map((acc) => {
@@ -130,7 +119,7 @@ export default function DemoLoginButtons() {
               variant="outline"
               disabled={!!activeRole}
               onClick={() => handleDemoLogin(acc)}
-              className="h-auto py-2.5 px-3 flex flex-col items-center justify-center gap-1.5 border-dashed hover:border-primary hover:bg-primary/5 transition-all text-xs"
+              className="h-auto py-2.5 px-3 flex flex-col items-center justify-center gap-1.5 hover:border-primary hover:bg-primary/5 transition-all text-xs"
             >
               {isLoading ? (
                 <Spinner className="size-4 text-primary" />
@@ -139,7 +128,7 @@ export default function DemoLoginButtons() {
               )}
               <span className="font-semibold text-foreground">{acc.label}</span>
               <span className="text-[10px] text-muted-foreground font-mono truncate max-w-full">
-                {acc.email.split("@")[0]}
+                Demo login
               </span>
             </Button>
           );

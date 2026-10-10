@@ -3,6 +3,7 @@ import type {
   AcademicSemester,
   ApiResponse,
   AttendanceReport,
+  AuditLog,
   Course,
   Department,
   Enrollment,
@@ -10,16 +11,19 @@ import type {
   FeeInvoice,
   FinanceReport,
   InstructorProfile,
+  ListResponse,
   PaginationParams,
   Program,
+  RegistrationPayload,
   ResultReport,
   Section,
+  SectionStatus,
   StudentProfile,
 } from "@/types";
 
 // --- STUDENTS ---
 export function getAllStudents(params?: PaginationParams) {
-  return apiClient<ApiResponse<StudentProfile[]>>("/students", {
+  return apiClient<ListResponse<StudentProfile>>("/students", {
     params,
   });
 }
@@ -28,14 +32,14 @@ export function getStudentById(id: string) {
   return apiClient<ApiResponse<StudentProfile>>(`/students/${id}`);
 }
 
-export function createStudent(payload: any) {
+export function createStudent(payload: RegistrationPayload) {
   return apiClient<ApiResponse<StudentProfile>>("/students", {
     method: "POST",
     body: payload,
   });
 }
 
-export function updateStudent(id: string, payload: any) {
+export function updateStudent(id: string, payload: Record<string, unknown>) {
   return apiClient<ApiResponse<StudentProfile>>(`/students/${id}`, {
     method: "PATCH",
     body: payload,
@@ -44,7 +48,7 @@ export function updateStudent(id: string, payload: any) {
 
 // --- INSTRUCTORS ---
 export function getAllInstructors(params?: PaginationParams) {
-  return apiClient<ApiResponse<InstructorProfile[]>>("/instructors", {
+  return apiClient<ListResponse<InstructorProfile>>("/instructors", {
     params,
   });
 }
@@ -53,14 +57,21 @@ export function getInstructorById(id: string) {
   return apiClient<ApiResponse<InstructorProfile>>(`/instructors/${id}`);
 }
 
-export function createInstructor(payload: any) {
+export function createInstructor(payload: {
+  name: string;
+  email: string;
+  password: string;
+  designation: string;
+  departmentId: string;
+  contactNo?: string;
+}) {
   return apiClient<ApiResponse<InstructorProfile>>("/instructors", {
     method: "POST",
     body: payload,
   });
 }
 
-export function updateInstructor(id: string, payload: any) {
+export function updateInstructor(id: string, payload: Record<string, unknown>) {
   return apiClient<ApiResponse<InstructorProfile>>(`/instructors/${id}`, {
     method: "PATCH",
     body: payload,
@@ -68,11 +79,13 @@ export function updateInstructor(id: string, payload: any) {
 }
 
 // --- DEPARTMENTS ---
-export function getAllDepartments(params?: {
-  searchTerm?: string;
-  isActive?: boolean;
-}) {
-  return apiClient<ApiResponse<Department[]>>("/departments", {
+export function getAllDepartments(
+  params?: PaginationParams & {
+    searchTerm?: string;
+    isActive?: boolean;
+  },
+) {
+  return apiClient<ListResponse<Department>>("/departments", {
     params,
   });
 }
@@ -95,19 +108,21 @@ export function updateDepartment(
 }
 
 export function deleteDepartment(id: string) {
-  return apiClient<ApiResponse<any>>(`/departments/${id}`, {
+  return apiClient<ApiResponse<unknown>>(`/departments/${id}`, {
     method: "DELETE",
   });
 }
 
 // --- PROGRAMS ---
-export function getAllPrograms(params?: {
-  searchTerm?: string;
-  departmentId?: string;
-  degreeType?: string;
-  isActive?: boolean;
-}) {
-  return apiClient<ApiResponse<Program[]>>("/programs", {
+export function getAllPrograms(
+  params?: PaginationParams & {
+    searchTerm?: string;
+    departmentId?: string;
+    degreeType?: string;
+    isActive?: boolean;
+  },
+) {
+  return apiClient<ListResponse<Program>>("/programs", {
     params,
   });
 }
@@ -126,7 +141,7 @@ export function createProgram(payload: {
   });
 }
 
-export function updateProgram(id: string, payload: any) {
+export function updateProgram(id: string, payload: Record<string, unknown>) {
   return apiClient<ApiResponse<Program>>(`/programs/${id}`, {
     method: "PATCH",
     body: payload,
@@ -134,14 +149,14 @@ export function updateProgram(id: string, payload: any) {
 }
 
 export function deleteProgram(id: string) {
-  return apiClient<ApiResponse<any>>(`/programs/${id}`, {
+  return apiClient<ApiResponse<unknown>>(`/programs/${id}`, {
     method: "DELETE",
   });
 }
 
 // --- COURSES ---
 export function getAllCourses(params?: PaginationParams) {
-  return apiClient<ApiResponse<Course[]>>("/courses", {
+  return apiClient<ListResponse<Course>>("/courses", {
     params,
   });
 }
@@ -153,7 +168,7 @@ export function getCourseById(id: string) {
 export function createCourse(payload: {
   code: string;
   title: string;
-  credits: number;
+  credit: number;
   departmentId: string;
   isElective?: boolean;
   description?: string;
@@ -162,11 +177,16 @@ export function createCourse(payload: {
 }) {
   return apiClient<ApiResponse<Course>>("/courses", {
     method: "POST",
-    body: payload,
+    body: {
+      code: payload.code,
+      title: payload.title,
+      departmentId: payload.departmentId,
+      credit: payload.credit,
+    },
   });
 }
 
-export function updateCourse(id: string, payload: any) {
+export function updateCourse(id: string, payload: Record<string, unknown>) {
   return apiClient<ApiResponse<Course>>(`/courses/${id}`, {
     method: "PATCH",
     body: payload,
@@ -174,23 +194,25 @@ export function updateCourse(id: string, payload: any) {
 }
 
 export function deleteCourse(id: string) {
-  return apiClient<ApiResponse<any>>(`/courses/${id}`, {
+  return apiClient<ApiResponse<unknown>>(`/courses/${id}`, {
     method: "DELETE",
   });
 }
 
 // --- SEMESTERS ---
-export function getAllSemesters(params?: {
-  year?: number;
-  term?: string;
-  status?: string;
-}) {
-  return apiClient<ApiResponse<AcademicSemester[]>>("/semesters", {
+export function getAllSemesters(
+  params?: PaginationParams & {
+    year?: number;
+    term?: string;
+    status?: string;
+  },
+) {
+  return apiClient<ListResponse<AcademicSemester>>("/semesters", {
     params,
   });
 }
 
-export function createSemester(payload: any) {
+export function createSemester(payload: Record<string, unknown>) {
   return apiClient<ApiResponse<AcademicSemester>>("/semesters", {
     method: "POST",
     body: payload,
@@ -205,20 +227,22 @@ export function updateSemesterStatus(id: string, status: string) {
 }
 
 export function deleteSemester(id: string) {
-  return apiClient<ApiResponse<any>>(`/semesters/${id}`, {
+  return apiClient<ApiResponse<unknown>>(`/semesters/${id}`, {
     method: "DELETE",
   });
 }
 
 // --- SECTIONS ---
-export function getAllSections(params?: {
-  courseId?: string;
-  semesterId?: string;
-  instructorId?: string;
-  status?: string;
-  searchTerm?: string;
-}) {
-  return apiClient<ApiResponse<Section[]>>("/sections", {
+export function getAllSections(
+  params?: PaginationParams & {
+    courseId?: string;
+    semesterId?: string;
+    instructorId?: string;
+    status?: string;
+    searchTerm?: string;
+  },
+) {
+  return apiClient<ListResponse<Section>>("/sections", {
     params,
   });
 }
@@ -234,7 +258,13 @@ export function createSection(payload: {
   sectionNumber: number;
   capacity: number;
   roomNumber?: string;
-  schedule?: any;
+  schedules: Array<{
+    dayOfWeek: number;
+    startTime: string;
+    endTime: string;
+    room: string;
+  }>;
+  status?: SectionStatus;
 }) {
   return apiClient<ApiResponse<Section>>("/sections", {
     method: "POST",
@@ -242,7 +272,7 @@ export function createSection(payload: {
   });
 }
 
-export function updateSection(id: string, payload: any) {
+export function updateSection(id: string, payload: Record<string, unknown>) {
   return apiClient<ApiResponse<Section>>(`/sections/${id}`, {
     method: "PATCH",
     body: payload,
@@ -250,30 +280,34 @@ export function updateSection(id: string, payload: any) {
 }
 
 export function deleteSection(id: string) {
-  return apiClient<ApiResponse<any>>(`/sections/${id}`, {
+  return apiClient<ApiResponse<unknown>>(`/sections/${id}`, {
     method: "DELETE",
   });
 }
 
 // --- ENROLLMENTS ---
-export function getAllEnrollments(params?: {
-  studentId?: string;
-  sectionId?: string;
-  semesterId?: string;
-  status?: string;
-}) {
-  return apiClient<ApiResponse<Enrollment[]>>("/enrollments", {
+export function getAllEnrollments(
+  params?: PaginationParams & {
+    studentId?: string;
+    sectionId?: string;
+    semesterId?: string;
+    status?: string;
+  },
+) {
+  return apiClient<ListResponse<Enrollment>>("/enrollments", {
     params,
   });
 }
 
 // --- INVOICES & REPORTS ---
-export function getAllInvoices(params?: {
-  status?: string;
-  studentId?: string;
-  semesterId?: string;
-}) {
-  return apiClient<ApiResponse<FeeInvoice[]>>("/fees/invoices", {
+export function getAllInvoices(
+  params?: PaginationParams & {
+    status?: string;
+    studentId?: string;
+    semesterId?: string;
+  },
+) {
+  return apiClient<ListResponse<FeeInvoice>>("/fees/invoices", {
     params,
   });
 }
@@ -295,7 +329,7 @@ export function bulkCreateInvoices(payload: {
   amount: number;
   dueDate: string;
 }) {
-  return apiClient<ApiResponse<any>>("/fees/invoices/bulk", {
+  return apiClient<ApiResponse<FeeInvoice[]>>("/fees/invoices/bulk", {
     method: "POST",
     body: payload,
   });
@@ -318,7 +352,7 @@ export function getFinanceReport() {
 }
 
 export function getAllAuditLogs(params?: PaginationParams) {
-  return apiClient<ApiResponse<any[]>>("/audit-logs", {
+  return apiClient<ListResponse<AuditLog>>("/audit-logs", {
     params,
   });
 }

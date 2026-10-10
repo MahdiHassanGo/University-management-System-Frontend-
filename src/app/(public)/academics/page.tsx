@@ -1,84 +1,129 @@
-import { BookOpen, Calendar, GraduationCap } from "lucide-react";
+import { BookOpen, CalendarDays } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-
-export default function AcademicsPage() {
+import { backendRequest } from "@/lib/server-api";
+import { extractDataArray } from "@/lib/utils";
+import type { AcademicSemester, ApiResponse, Program } from "@/types";
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Academics | UniCore",
+  description:
+    "Explore the university’s current degree programs and academic calendar.",
+};
+export default async function AcademicsPage() {
+  let programs: Program[] = [];
+  let semesters: AcademicSemester[] = [];
+  let unavailable = false;
+  try {
+    const responses = await Promise.all([
+      backendRequest("public/programs?isActive=true&limit=100"),
+      backendRequest("public/semesters?limit=100"),
+    ]);
+    if (responses.some((r) => !r.ok)) throw new Error("Unavailable");
+    programs = extractDataArray(
+      (await responses[0].json()) as ApiResponse<Program[]>,
+    );
+    semesters = extractDataArray(
+      (await responses[1].json()) as ApiResponse<AcademicSemester[]>,
+    );
+  } catch {
+    unavailable = true;
+  }
   return (
-    <div className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto text-center space-y-4">
-        <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
-          Academic Catalog & Programs
+    <main
+      id="main-content"
+      className="mx-auto max-w-7xl space-y-10 px-5 py-16 sm:px-8"
+    >
+      <div className="max-w-2xl">
+        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+          Academic life
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
+          Find your path forward.
         </h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          Explore accredited undergraduate and graduate programs offered by the
-          university faculties.
+        <p className="mt-4 text-muted-foreground">
+          Explore current degree programs and the university’s published
+          semester calendar.
         </p>
       </div>
-
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="rounded-2xl border bg-card p-6 shadow-sm space-y-4">
-          <div className="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-            <BookOpen className="size-5" />
-          </div>
-          <h2 className="text-lg font-bold text-foreground">
-            Computer Science & Engineering
-          </h2>
-          <p className="text-xs font-mono text-muted-foreground">
-            Department: CSE • Code: BSCSE
-          </p>
-          <p className="text-sm text-muted-foreground">
-            A comprehensive 140-credit curriculum spanning software engineering,
-            algorithms, databases, artificial intelligence, and network systems.
-          </p>
-          <div className="pt-2 border-t text-xs text-muted-foreground">
-            Maximum Semester Load: 21 Credits
-          </div>
+      {unavailable ? (
+        <div role="alert" className="rounded-xl border bg-card p-8">
+          The academic catalog is temporarily unavailable. Please try again
+          shortly.
         </div>
-
-        <div className="rounded-2xl border bg-card p-6 shadow-sm space-y-4">
-          <div className="size-10 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
-            <Calendar className="size-5" />
-          </div>
-          <h2 className="text-lg font-bold text-foreground">
-            Semester Structure
-          </h2>
-          <p className="text-xs font-mono text-muted-foreground">
-            3 Terms Annually
-          </p>
-          <p className="text-sm text-muted-foreground">
-            The university operates on a tri-semester schedule: Spring, Summer,
-            and Fall. Each semester consists of 14 instructional weeks and a
-            2-week final exam cycle.
-          </p>
-          <div className="pt-2 border-t text-xs text-muted-foreground">
-            Active Term: Fall 2026
-          </div>
-        </div>
-
-        <div className="rounded-2xl border bg-card p-6 shadow-sm space-y-4">
-          <div className="size-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-            <GraduationCap className="size-5" />
-          </div>
-          <h2 className="text-lg font-bold text-foreground">
-            Admission Requirements
-          </h2>
-          <p className="text-xs font-mono text-muted-foreground">
-            Enrolling Now
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Eligible candidates can register online through our Student
-            Admission Portal. Once admitted, students receive institutional
-            student IDs and portal access.
-          </p>
-          <div className="pt-2 border-t">
-            <Link href="/register">
-              <Button size="sm" variant="outline" className="w-full">
-                Apply for Admission
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+      ) : (
+        <>
+          <section className="space-y-4">
+            <h2 className="flex items-center gap-2 text-xl font-semibold">
+              <BookOpen className="size-5 text-primary" />
+              Degree programs
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {programs.map((p) => (
+                <article key={p.id} className="rounded-2xl border bg-card p-6">
+                  <p className="text-xs font-semibold text-primary">{p.code}</p>
+                  <h3 className="mt-3 text-lg font-semibold">{p.name}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {p.department?.name} · {p.degreeType}
+                  </p>
+                  <div className="mt-5 border-t pt-4 text-sm">
+                    {p.totalCredits} credits · up to {p.maxSemesterCredits} each
+                    semester
+                  </div>
+                </article>
+              ))}
+            </div>
+            {programs.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                No active programs have been published.
+              </p>
+            )}
+          </section>
+          <section className="space-y-4">
+            <h2 className="flex items-center gap-2 text-xl font-semibold">
+              <CalendarDays className="size-5 text-primary" />
+              Academic calendar
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {semesters.map((s) => (
+                <article key={s.id} className="rounded-2xl border bg-card p-6">
+                  <h3 className="font-semibold">
+                    {s.term} {s.year}
+                  </h3>
+                  <p className="mt-2 text-xs text-primary">
+                    {s.status.replaceAll("_", " ")}
+                  </p>
+                  <dl className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    <div>
+                      Registration:{" "}
+                      {new Date(s.registrationStart).toLocaleDateString(
+                        "en-GB",
+                      )}{" "}
+                      –{" "}
+                      {new Date(s.registrationEnd).toLocaleDateString("en-GB")}
+                    </div>
+                    <div>
+                      Classes:{" "}
+                      {new Date(s.classStart).toLocaleDateString("en-GB")} –{" "}
+                      {new Date(s.classEnd).toLocaleDateString("en-GB")}
+                    </div>
+                  </dl>
+                </article>
+              ))}
+            </div>
+            {semesters.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                No semesters have been published.
+              </p>
+            )}
+          </section>
+        </>
+      )}
+      <Link
+        href="/register"
+        className="inline-block rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
+      >
+        Register as a student
+      </Link>
+    </main>
   );
 }

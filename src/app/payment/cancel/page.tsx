@@ -19,17 +19,17 @@ export default function PaymentCancelPage() {
 
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Payment Cancelled
+            Checkout not completed
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            The payment session was cancelled or timed out before completion. No
-            deductions were made to your account.
+            Checkout was cancelled, failed, or could not be verified. Please
+            check your payment history before trying again.
           </p>
         </div>
 
         <div className="rounded-xl border bg-muted/40 p-4 text-xs text-left text-muted-foreground">
-          You can re-attempt paying your outstanding semester fees at any time
-          from your Student Finance portal.
+          If your account was charged, wait for confirmation or contact the
+          finance office with your transaction reference.
         </div>
 
         <div className="pt-2 flex flex-col gap-2.5">

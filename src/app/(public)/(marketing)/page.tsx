@@ -1,260 +1,218 @@
 import {
   ArrowRight,
   BookOpen,
-  CheckCircle2,
+  CalendarDays,
+  Check,
+  CreditCard,
   GraduationCap,
-  Shield,
-  Sparkles,
+  ShieldCheck,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
+const workspaces = [
+  {
+    icon: GraduationCap,
+    title: "For students",
+    description:
+      "Plan your semester, register for courses, and follow your progress from one personal workspace.",
+    items: [
+      "Course registration",
+      "Attendance & results",
+      "Tuition & receipts",
+    ],
+  },
+  {
+    icon: BookOpen,
+    title: "For faculty",
+    description:
+      "Spend more time teaching with a connected view of your sections, student rosters, and assessments.",
+    items: [
+      "Assigned sections",
+      "Session attendance",
+      "Exams & grade publishing",
+    ],
+  },
+  {
+    icon: Users,
+    title: "For administrators",
+    description:
+      "Bring people, academic operations, and finance together with a clear view of campus activity.",
+    items: [
+      "Academic catalog",
+      "Student & faculty records",
+      "Reports & audit history",
+    ],
+  },
+];
+export const metadata = {
+  title: "UniCore | Your campus, connected",
+  description:
+    "A connected university workspace for students, faculty, and administrators.",
+  openGraph: {
+    title: "UniCore — Your campus, connected",
+    description: "Manage academic life in one secure workspace.",
+  },
+};
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden border-b bg-gradient-to-b from-primary/5 via-background to-background py-20 md:py-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
-                <Sparkles className="size-3.5" />
-                <span>Next-Generation Academic ERP</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-                Empowering Excellence in{" "}
-                <span className="bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                  Higher Education
-                </span>
-              </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                A unified campus operating system uniting Students, Faculty, and
-                Super Administrators. Experience automated semester enrollment,
-                session attendance, real-time grading, and secure tuition
-                payments.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start pt-2">
-                <Link href="/login">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto gap-2 shadow-md"
-                  >
-                    <span>Access University Portal</span>
-                    <ArrowRight className="size-4" />
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full sm:w-auto"
-                  >
-                    Student Registration
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-6 border-t flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-muted-foreground font-medium">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>Real Backend API Integration</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>Role-Based Access Control</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
-                  <span>SSLCommerz Gateway Ready</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Demo Credentials Card */}
-            <div className="lg:col-span-5">
-              <div className="rounded-2xl border bg-card/90 p-6 sm:p-8 shadow-xl backdrop-blur-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 h-32 w-32 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <Shield className="size-5 text-primary" />
-                  <span>Instant Demo Credentials</span>
-                </h3>
-                <p className="text-xs text-muted-foreground mt-1 mb-5">
-                  Authenticate instantly using the 1-click credentials below on
-                  the sign-in portal.
-                </p>
-
-                <div className="space-y-3">
-                  <div className="rounded-xl border p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center justify-between text-xs font-semibold">
-                      <span className="text-primary flex items-center gap-1.5">
-                        <Shield className="size-3.5" /> Super Admin
-                      </span>
-                      <span className="rounded bg-primary/10 px-2 py-0.5 text-primary text-[10px]">
-                        Full Access
-                      </span>
-                    </div>
-                    <div className="mt-1.5 text-xs font-mono text-muted-foreground">
-                      admin@university.edu
-                    </div>
-                    <div className="text-[11px] text-muted-foreground/80">
-                      Pass: Admin123!
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center justify-between text-xs font-semibold">
-                      <span className="text-blue-600 flex items-center gap-1.5">
-                        <Users className="size-3.5" /> Instructor
-                      </span>
-                      <span className="rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-0.5 text-[10px]">
-                        Faculty
-                      </span>
-                    </div>
-                    <div className="mt-1.5 text-xs font-mono text-muted-foreground">
-                      instructor@university.edu
-                    </div>
-                    <div className="text-[11px] text-muted-foreground/80">
-                      Pass: Instructor123!
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center justify-between text-xs font-semibold">
-                      <span className="text-emerald-600 flex items-center gap-1.5">
-                        <GraduationCap className="size-3.5" /> Student
-                      </span>
-                      <span className="rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 px-2 py-0.5 text-[10px]">
-                        Learner
-                      </span>
-                    </div>
-                    <div className="mt-1.5 text-xs font-mono text-muted-foreground">
-                      student@university.edu
-                    </div>
-                    <div className="text-[11px] text-muted-foreground/80">
-                      Pass: Student123!
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t">
-                  <Link href="/login" className="block">
-                    <Button variant="default" className="w-full">
-                      Launch Demo Login
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Role Architecture Highlights */}
-      <section className="py-20 bg-muted/20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
-              Designed for Institutional Workflows
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Every persona in the university ecosystem operates within a
-              purpose-built workspace tailored to academic integrity.
+    <main id="main-content">
+      <section className="relative overflow-hidden border-b bg-[#112d32] text-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-24">
+          <div className="space-y-7">
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[.22em] text-emerald-200">
+              <span className="size-1.5 rounded-full bg-emerald-300" />
+              University management, simplified
             </p>
+            <h1 className="text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+              Your campus.
+              <br />
+              <span className="text-emerald-200">Connected.</span>
+            </h1>
+            <p className="max-w-lg text-lg leading-relaxed text-white/70">
+              A thoughtful workspace for academic life. Manage courses, connect
+              your people, and keep every semester moving forward.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/login"
+                className="inline-flex h-12 items-center gap-3 rounded-lg bg-emerald-200 px-6 text-sm font-semibold text-[#112d32] transition hover:bg-emerald-100"
+              >
+                Enter your workspace
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                href="/academics"
+                className="inline-flex h-12 items-center gap-3 rounded-lg border border-white/25 px-6 text-sm font-medium transition hover:bg-white/10"
+              >
+                Explore academics
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-5 border-t border-white/15 pt-6 text-xs text-white/70">
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="size-4 text-emerald-200" />
+                Secure role access
+              </span>
+              <span className="flex items-center gap-2">
+                <CalendarDays className="size-4 text-emerald-200" />
+                One connected semester
+              </span>
+            </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Super Admin Card */}
-            <div className="rounded-2xl border bg-card p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
-              <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-                <Shield className="size-6" />
+          <div className="relative">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/15">
+              <Image
+                src="/campus.svg"
+                alt="Illustration of a university academic building"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#112d32]/80 to-transparent" />
+              <div className="absolute bottom-20 left-6 right-6">
+                <p className="text-xs uppercase tracking-widest text-white/70">
+                  Built around your academic life
+                </p>
+                <p className="mt-2 text-2xl font-medium">
+                  More clarity. Every semester.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground">
-                Institutional Governance
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Super Admins oversee academic cataloging, department curricula,
-                semester schedules, multi-step section provisioning, and audit
-                logs.
-              </p>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-2 border-t">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" /> Curricula &
-                  Course Prerequisites
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" /> Multi-Step
-                  Section Creation Wizard
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" /> Recharts
-                  Governance Dashboards
-                </li>
-              </ul>
             </div>
-
-            {/* Instructor Card */}
-            <div className="rounded-2xl border bg-card p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
-              <div className="size-12 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold">
-                <BookOpen className="size-6" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">
-                Faculty & Grading Hub
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Faculty manage student rosters, conduct date-stamped attendance
-                sessions, administer weighted examinations, and calculate final
-                grades.
-              </p>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-2 border-t">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-blue-600" />{" "}
-                  Interactive Attendance Marker
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-blue-600" /> Bulk Exam
-                  Marks Entry
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-blue-600" /> Automated
-                  GPA & Result Publication
-                </li>
-              </ul>
-            </div>
-
-            {/* Student Card */}
-            <div className="rounded-2xl border bg-card p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
-              <div className="size-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
+            <div className="absolute -bottom-6 left-4 right-4 flex items-center gap-4 rounded-xl border bg-card p-5 text-foreground shadow-lg sm:left-8 sm:right-8">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <GraduationCap className="size-6" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold">
+                  A workspace for everyone
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Students · Faculty · Administration
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground">
-                Student Academic Journey
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Students enroll in available sections based on credit caps,
-                review cumulative transcripts, monitor session attendance, and
-                settle tuition fees.
-              </p>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-2 border-t">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-emerald-600" />{" "}
-                  Real-time Course Registration & Drop
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-emerald-600" />{" "}
-                  Verified CGPA & Transcripts
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-emerald-600" />{" "}
-                  SSLCommerz Hosted Payment Checkout
-                </li>
-              </ul>
+              <Link
+                href="/login"
+                aria-label="Explore demo workspaces"
+                className="ml-auto rounded-full border p-2 text-primary hover:bg-muted"
+              >
+                <ArrowRight className="size-4" />
+              </Link>
             </div>
           </div>
         </div>
       </section>
-    </div>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-24">
+        <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.18em] text-primary">
+              One platform, three perspectives
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Designed for the way you work.
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+            Each role gets the tools and information it needs, with a shared
+            foundation for the whole university.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {workspaces.map(({ icon: Icon, title, description, items }) => (
+            <article
+              key={title}
+              className="flex flex-col rounded-2xl border bg-card p-7 shadow-xs"
+            >
+              <span className="mb-6 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Icon className="size-5" />
+              </span>
+              <h3 className="text-xl font-semibold">{title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {description}
+              </p>
+              <ul className="my-6 space-y-3 border-t pt-5 text-sm">
+                {items.map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <Check className="size-4 text-primary" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/login"
+                className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-primary"
+              >
+                Open workspace
+                <ArrowRight className="size-4" />
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="border-y bg-primary/5">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-5 py-12 sm:px-8 md:flex-row md:items-center">
+          <div className="flex items-center gap-5">
+            <CreditCard className="size-9 shrink-0 text-primary" />
+            <div>
+              <h2 className="text-xl font-semibold">
+                Tuition payments, with clarity.
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                View invoices, use secure checkout, and keep confirmed receipts
+                together.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
+          >
+            Sign in to get started
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }

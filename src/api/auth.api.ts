@@ -1,10 +1,12 @@
 import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
+  AuthProfile,
   ChangePasswordPayload,
   LoginPayload,
   LoginResponse,
   RegistrationPayload,
+  StudentProfile,
 } from "@/types";
 
 export function userLogin(payload: LoginPayload) {
@@ -15,7 +17,7 @@ export function userLogin(payload: LoginPayload) {
 }
 
 export function userRegistration(payload: RegistrationPayload) {
-  return apiClient<ApiResponse<any>>("/auth/register", {
+  return apiClient<ApiResponse<StudentProfile>>("/auth/register", {
     method: "POST",
     body: payload,
   });
@@ -28,7 +30,7 @@ export function userLogout() {
 }
 
 export function getMe() {
-  return apiClient<ApiResponse<any>>("/auth/me");
+  return apiClient<ApiResponse<AuthProfile>>("/auth/me");
 }
 
 export function googleOAuth(payload: {
@@ -50,7 +52,7 @@ export function changePassword(payload: ChangePasswordPayload) {
 }
 
 export function refreshToken() {
-  return apiClient<ApiResponse<{ accessToken: string }>>(
+  return apiClient<ApiResponse<{ authenticated: boolean }>>(
     "/auth/refresh-token",
     {
       method: "POST",

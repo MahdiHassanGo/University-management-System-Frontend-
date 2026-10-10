@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useLogin } from "@/hooks";
+import { getErrorMessage } from "@/lib/errors";
 import { loginSchema } from "@/validation";
 
 export default function LoginForm() {
@@ -67,7 +68,7 @@ export default function LoginForm() {
                     : "/student";
 
               router.push(target);
-            } catch (_err: any) {
+            } catch (_err: unknown) {
               toast.add({
                 title: "Profile Resolution Failed",
                 description: "Session active, redirecting to home",
@@ -76,10 +77,9 @@ export default function LoginForm() {
               router.push("/");
             }
           },
-          onError: (err: any) => {
+          onError: (err: unknown) => {
             const errorMsg =
-              err?.data?.message ||
-              err?.message ||
+              getErrorMessage(err) ||
               "Invalid email or password. Please verify credentials.";
             toast.add({
               title: "Sign-in Failed",
@@ -96,10 +96,10 @@ export default function LoginForm() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-1.5 text-center">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Sign In to Portal
+          Welcome back
         </h1>
         <p className="text-xs text-muted-foreground">
-          Enter your academic credentials to access your university dashboard
+          Sign in to your campus workspace.
         </p>
       </div>
 
@@ -128,7 +128,7 @@ export default function LoginForm() {
                       id={field.name}
                       name={field.name}
                       type="email"
-                      placeholder="admin@university.edu"
+                      placeholder="you@university.edu"
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                       value={field.state.value}
@@ -204,9 +204,12 @@ export default function LoginForm() {
         </FieldGroup>
       </form>
 
-      <FieldSeparator>or social account</FieldSeparator>
-
-      <GoogleLoginComponent />
+      {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+        <>
+          <FieldSeparator>or sign in with Google</FieldSeparator>
+          <GoogleLoginComponent />
+        </>
+      )}
 
       <div className="text-center text-xs text-muted-foreground">
         Prospective student seeking admission?{" "}

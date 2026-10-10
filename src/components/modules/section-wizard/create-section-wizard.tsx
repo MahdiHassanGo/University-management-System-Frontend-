@@ -1,5 +1,5 @@
 "use client";
-
+import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   BookOpen,
@@ -21,6 +21,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
+import { getErrorMessage } from "@/lib/errors";
+import { extractDataArray } from "@/lib/utils";
+import { sectionWizardSchema } from "@/validation/dashboard.validation";
 
 interface WizardProps {
   onSuccess?: () => void;
@@ -55,7 +58,7 @@ export default function CreateSectionWizard({
 
   const { data: semestersData, isLoading: loadingSemesters } = useQuery({
     queryKey: ["semesters"],
-    queryFn: () => getAllSemesters(),
+    queryFn: () => getAllSemesters({ limit: 100 }),
   });
 
   const { data: instructorsData, isLoading: loadingInstructors } = useQuery({
@@ -63,9 +66,9 @@ export default function CreateSectionWizard({
     queryFn: () => getAllInstructors({ limit: 100 }),
   });
 
-  const courses = coursesData?.data || [];
-  const semesters = semestersData?.data || [];
-  const instructors = instructorsData?.data || [];
+  const courses = extractDataArray(coursesData);
+  const semesters = extractDataArray(semestersData);
+  const instructors = extractDataArray(instructorsData);
 
   // Selected object helpers for review
   const selectedCourse = courses.find((c) => c.id === formData.courseId);
@@ -86,13 +89,10 @@ export default function CreateSectionWizard({
       queryClient.invalidateQueries({ queryKey: ["sections"] });
       onSuccess?.();
     },
-    onError: (err: any) => {
+    onError: (err: unknown) => {
       toast.add({
         title: "Creation Error",
-        description:
-          err?.data?.message ||
-          err?.message ||
-          "Failed to create course section",
+        description: getErrorMessage(err) || "Failed to create course section",
         type: "error",
       });
     },
@@ -127,17 +127,24 @@ export default function CreateSectionWizard({
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleSubmit = () => {
+  const submitSection = () => {
     const payload = {
       courseId: formData.courseId,
       semesterId: formData.semesterId,
       instructorId: formData.instructorId,
       sectionNumber: Number(formData.sectionNumber),
       capacity: Number(formData.capacity),
-      roomNumber: formData.roomNumber || undefined,
-      schedule: [
+      schedules: [
         {
-          dayOfWeek: formData.day,
+          dayOfWeek: [
+            "SUNDAY",
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+          ].indexOf(formData.day),
           startTime: formData.startTime,
           endTime: formData.endTime,
           room: formData.roomNumber,
@@ -145,6 +152,31 @@ export default function CreateSectionWizard({
       ],
     };
     createMutation.mutate(payload);
+  };
+
+  const wizardForm = useForm({
+    defaultValues: { values: formData },
+    validators: {
+      onSubmit: ({ value }) => {
+        const check = sectionWizardSchema.safeParse(value.values);
+        if (!check.success) {
+          toast.add({
+            title: "Check your section details",
+            description: check.error.issues
+              .map((issue) => issue.message)
+              .join(" "),
+            type: "error",
+          });
+          return "Invalid section details";
+        }
+        return undefined;
+      },
+    },
+    onSubmit: () => submitSection(),
+  });
+  const handleSubmit = () => {
+    wizardForm.setFieldValue("values", formData);
+    void wizardForm.handleSubmit();
   };
 
   const stepTitles = [
@@ -214,7 +246,7 @@ export default function CreateSectionWizard({
               <option value="">-- Choose Course from Catalog --</option>
               {courses.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.code} — {c.title} ({c.credits} cr)
+                  {c.code} — {c.title} ({c.credit} cr)
                 </option>
               ))}
             </select>

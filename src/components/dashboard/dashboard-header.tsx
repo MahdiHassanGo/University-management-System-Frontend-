@@ -41,7 +41,7 @@ export default function DashboardHeader({ role }: { role: UserRole }) {
   });
 
   const notifications = notificationsData?.data || [];
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.readAt).length;
 
   // Optimistic Mark-as-read mutation (Meets Day 4 item 3 requirement)
   const markAsReadMutation = useMutation({
@@ -61,7 +61,9 @@ export default function DashboardHeader({ role }: { role: UserRole }) {
           {
             ...previousNotifications,
             data: previousNotifications.data.map((item) =>
-              item.id === id ? { ...item, isRead: true } : item,
+              item.id === id
+                ? { ...item, readAt: new Date().toISOString() }
+                : item,
             ),
           },
         );
@@ -176,14 +178,14 @@ export default function DashboardHeader({ role }: { role: UserRole }) {
                   <div
                     key={n.id}
                     className={`p-3.5 transition-colors flex flex-col gap-1 ${
-                      n.isRead ? "bg-card opacity-70" : "bg-primary/5"
+                      n.readAt ? "bg-card opacity-70" : "bg-primary/5"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-foreground">
                         {n.title}
                       </span>
-                      {!n.isRead && (
+                      {!n.readAt && (
                         <button
                           type="button"
                           onClick={() => markAsReadMutation.mutate(n.id)}

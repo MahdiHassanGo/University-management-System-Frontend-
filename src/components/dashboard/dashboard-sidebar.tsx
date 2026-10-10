@@ -1,5 +1,6 @@
 "use client";
 
+import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/common/Logo";
@@ -56,7 +57,7 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
                       <SidebarMenuButton
                         render={<Link href={item.url} />}
                         isActive={isActive}
-                        className={`gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+                        className={`gap-3 h-10 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                           isActive
                             ? "bg-primary text-primary-foreground font-semibold shadow-xs hover:bg-primary hover:text-primary-foreground"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -73,6 +74,13 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <div className="m-4 rounded-xl border bg-primary/5 p-4 group-data-[collapsible=icon]:hidden">
+        <GraduationCap className="mb-2 size-5 text-primary" />
+        <p className="text-sm font-semibold">Your campus, connected</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+          Academics, people, and payments in one workspace.
+        </p>
+      </div>
       <SidebarRail />
     </Sidebar>
   );
