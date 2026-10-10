@@ -87,6 +87,8 @@ export function getMyInvoices() {
 }
 
 export function initiatePayment(invoiceId: string) {
+  const frontendUrl =
+    typeof window !== "undefined" ? window.location.origin : undefined;
   return apiClient<
     ApiResponse<{
       paymentId: string;
@@ -96,7 +98,7 @@ export function initiatePayment(invoiceId: string) {
     }>
   >("/payments/initiate", {
     method: "POST",
-    body: { invoiceId },
+    body: { invoiceId, frontendUrl },
   });
 }
 

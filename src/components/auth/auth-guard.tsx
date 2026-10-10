@@ -14,7 +14,14 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isPending) return;
     if (isError || !user) {
-      router.replace("/login");
+      if (typeof window !== "undefined") {
+        const redirect = encodeURIComponent(
+          window.location.pathname + window.location.search,
+        );
+        router.replace(`/login?redirect=${redirect}`);
+      } else {
+        router.replace("/login");
+      }
     }
   }, [isPending, isError, user, router]);
 

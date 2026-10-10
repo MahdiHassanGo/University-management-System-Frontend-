@@ -16,7 +16,7 @@ export async function proxy(request: NextRequest) {
       : pathname.startsWith("/student")
         ? "STUDENT"
         : null;
-  const isProtected = !!targetRole || pathname.startsWith("/payment");
+  const isProtected = !!targetRole;
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const signIn = () => {
     const url = new URL("/login", request.url);
@@ -57,7 +57,6 @@ export const config = {
     "/admin/:path*",
     "/instructor/:path*",
     "/student/:path*",
-    "/payment/:path*",
     "/login",
     "/register",
   ],

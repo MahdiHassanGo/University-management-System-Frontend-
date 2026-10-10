@@ -27,6 +27,7 @@ async function handle(request: NextRequest, context: Context) {
   const refresh = request.cookies.get(REFRESH_COOKIE)?.value;
   if (refresh && route === "auth/refresh-token")
     headers.set("Cookie", `refreshToken=${refresh}`);
+  headers.set("x-frontend-origin", request.nextUrl.origin);
   try {
     const upstream = await backendRequest(`${route}${request.nextUrl.search}`, {
       method: request.method,
