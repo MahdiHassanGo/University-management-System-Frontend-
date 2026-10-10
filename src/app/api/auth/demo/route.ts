@@ -21,15 +21,15 @@ export async function POST(request: NextRequest) {
     const accounts = {
       SUPER_ADMIN: {
         email: process.env.DEMO_ADMIN_EMAIL || "admin@university.edu",
-        password: process.env.DEMO_ADMIN_PASSWORD,
+        password: process.env.DEMO_ADMIN_PASSWORD || "Admin123!",
       },
       INSTRUCTOR: {
         email: process.env.DEMO_INSTRUCTOR_EMAIL || "instructor@university.edu",
-        password: process.env.DEMO_INSTRUCTOR_PASSWORD,
+        password: process.env.DEMO_INSTRUCTOR_PASSWORD || "Instructor123!",
       },
       STUDENT: {
         email: process.env.DEMO_STUDENT_EMAIL || "student@university.edu",
-        password: process.env.DEMO_STUDENT_PASSWORD,
+        password: process.env.DEMO_STUDENT_PASSWORD || "Student123!",
       },
     };
     const account = accounts[input.data.role];
