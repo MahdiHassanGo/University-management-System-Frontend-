@@ -111,7 +111,7 @@ export default function StudentCourseRegistrationPage() {
                         {sec.instructor?.name || "TBA"}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {sec.roomNumber || "TBD"}
+                        {sec.roomNumber || sec.schedules?.[0]?.room || "TBD"}
                       </td>
                       <td className="px-4 py-3">
                         <span

@@ -102,6 +102,13 @@ export interface Section {
   capacity: number;
   enrolledCount?: number;
   roomNumber?: string;
+  schedules?: Array<{
+    id?: string;
+    room?: string;
+    dayOfWeek?: number;
+    startTime?: string;
+    endTime?: string;
+  }>;
   schedule?: ClassScheduleItem[] | unknown;
   status: SectionStatus;
   createdAt: string;

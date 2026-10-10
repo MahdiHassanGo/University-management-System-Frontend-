@@ -101,7 +101,7 @@ export default function InstructorSectionDetailPage() {
         <div className="rounded-xl border bg-card p-4">
           <div className="text-xs text-muted-foreground">Room / Location</div>
           <div className="text-2xl font-bold text-foreground mt-1">
-            {section?.roomNumber || "TBD"}
+            {section?.roomNumber || section?.schedules?.[0]?.room || "TBD"}
           </div>
           <div className="text-xs text-muted-foreground mt-1">
             Assigned lecture hall

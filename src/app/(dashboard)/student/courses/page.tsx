@@ -120,7 +120,9 @@ export default function StudentCoursesPage() {
                       {enr.section?.instructor?.name || "Faculty Member"}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {enr.section?.roomNumber || "TBD"}
+                      {enr.section?.roomNumber ||
+                        enr.section?.schedules?.[0]?.room ||
+                        "TBD"}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <Button

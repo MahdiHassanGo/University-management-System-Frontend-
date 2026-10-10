@@ -148,7 +148,7 @@ export default function AdminSectionsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {sec.roomNumber || "TBD"}
+                      {sec.roomNumber || sec.schedules?.[0]?.room || "TBD"}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <Button
