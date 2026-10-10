@@ -11,7 +11,7 @@ This document contains the finalized submission parameters for the **B7A7 Univer
 - **Backend Repository**: [https://github.com/MahdiHassanGo/University-Management-System-Backend](https://github.com/MahdiHassanGo/University-Management-System-Backend) (Level 2 Assignment 6)
 - **Live Production Backend API**: `https://university-management-system-mu-sage.vercel.app/api/v1`
 - **Backend Health Check**: `https://university-management-system-mu-sage.vercel.app/health`
-- **Live Frontend URL**: Deployed via Vercel connecting to `MahdiHassanGo/University-management-System-Frontend-`
+- **Live Frontend URL**: [https://university-management-system-fronte-ten.vercel.app](https://university-management-system-fronte-ten.vercel.app)
 - **API Documentation**: Documented in `docs/ROLE_API_MATRIX.md` covering all 19 modules, endpoints, request/response structures, and UI consumers.
 - **Video Walkthrough Guide**: Documented in `docs/VIDEO_WALKTHROUGH_SCRIPT.md` with timestamped narration and step-by-step clicks.
 

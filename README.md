@@ -16,7 +16,9 @@ An enterprise-grade, high-performance, and accessible University Management Syst
 
 - **Project Name**: University Management System (UMS)
 - **Frontend Repository**: [https://github.com/MahdiHassanGo/University-management-System-Frontend-.git](https://github.com/MahdiHassanGo/University-management-System-Frontend-.git)
-- **Backend Repository**: Level 2 Assignment 6 University Management System Backend
+- **Backend Repository**: [https://github.com/MahdiHassanGo/University-Management-System.git](https://github.com/MahdiHassanGo/University-Management-System.git)
+- **Live Frontend URL**: [https://university-management-system-fronte-ten.vercel.app](https://university-management-system-fronte-ten.vercel.app)
+- **Live Backend API**: [https://university-management-system-mu-sage.vercel.app/api/v1](https://university-management-system-mu-sage.vercel.app/api/v1)
 - **Target Remote Branch**: `main`
 
 ---
