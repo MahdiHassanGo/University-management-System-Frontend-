@@ -45,8 +45,6 @@ export async function proxy(request: NextRequest) {
       return isProtected ? signIn() : NextResponse.next();
     if (targetRole && targetRole !== role)
       return NextResponse.redirect(new URL(home[role], request.url));
-    if (pathname === "/login" || pathname === "/register")
-      return NextResponse.redirect(new URL(home[role], request.url));
   } catch {
     return NextResponse.next();
   }
@@ -57,7 +55,5 @@ export const config = {
     "/admin/:path*",
     "/instructor/:path*",
     "/student/:path*",
-    "/login",
-    "/register",
   ],
 };

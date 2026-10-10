@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Logo from "@/components/common/Logo";
 import { Button } from "@/components/ui/button";
+import { useGetMe } from "@/hooks";
+import type { UserRole } from "@/types";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -18,6 +20,18 @@ const NAV_LINKS = [
 export default function PublicHeader() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { data: userData } = useGetMe();
+
+  const profile = userData?.data;
+  const user = profile?.user || profile;
+  const role = user?.role as UserRole | undefined;
+
+  const dashboardHref =
+    role === "SUPER_ADMIN"
+      ? "/admin"
+      : role === "INSTRUCTOR"
+        ? "/instructor"
+        : "/student";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md transition-all">
@@ -47,17 +61,35 @@ export default function PublicHeader() {
 
         {/* Auth CTA Actions */}
         <div className="hidden sm:flex items-center gap-3">
-          <Link href="/login">
-            <Button variant="ghost" size="sm" className="font-medium">
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button size="sm" className="gap-1.5 shadow-sm">
-              <span>Student Admission</span>
-              <ArrowRight className="size-4" />
-            </Button>
-          </Link>
+          {role ? (
+            <>
+              <Link href={dashboardHref}>
+                <Button size="sm" className="gap-1.5 shadow-sm">
+                  <span>Dashboard</span>
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="font-medium text-muted-foreground hover:text-foreground">
+                  Switch Role
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="font-medium">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm" className="gap-1.5 shadow-sm">
+                  <span>Student Admission</span>
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -98,17 +130,35 @@ export default function PublicHeader() {
             })}
           </nav>
           <div className="pt-3 border-t flex flex-col gap-2">
-            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="outline" className="w-full justify-center">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full justify-center gap-2">
-                <span>Student Admission</span>
-                <ArrowRight className="size-4" />
-              </Button>
-            </Link>
+            {role ? (
+              <>
+                <Link href={dashboardHref} onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full justify-center gap-2">
+                    <span>Go to Dashboard</span>
+                    <ArrowRight className="size-4" />
+                  </Button>
+                </Link>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-center">
+                    Switch Role / Sign In
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-center">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full justify-center gap-2">
+                    <span>Student Admission</span>
+                    <ArrowRight className="size-4" />
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
